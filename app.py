@@ -120,19 +120,33 @@ def get_audio_items():
     mp3_files = [f for f in all_files if f.lower().endswith(".mp3")]
     return jsonify(mp3_files)
 
-@app.route('/items/<filename>')
-def serve_item(filename):
-    """
-    Liefert einzelne MP3-Dateien aus 'items'.
-    """
-    return send_from_directory(ITEMS_FOLDER, filename)
-
 @app.route('/grabaciones/<path:filename>')
 def serve_grabaciones_file(filename):
     """
-    Liefert Dateien aus 'grabaciones/' (z.B. .json oder .mp3).
+    Liefert Dateien aus 'grabaciones/' (z.B. .json oder .mp3) nur für authentifizierte Benutzer.
     """
+    if not validate_jwt():
+        return redirect(url_for('index'))
     return send_from_directory(GRABACIONES_FOLDER, filename)
+
+@app.route('/items/<filename>')
+def serve_item(filename):
+    """
+    Liefert einzelne MP3-Dateien aus 'items' nur für authentifizierte Benutzer.
+    """
+    if not validate_jwt():
+        return redirect(url_for('index'))
+    return send_from_directory(ITEMS_FOLDER, filename)
+
+@app.after_request
+def add_security_headers(response):
+    """
+    Fügt Header hinzu, um Indizierung durch Suchmaschinen zu verhindern.
+    """
+    response.headers['X-Robots-Tag'] = 'noindex, nofollow'
+    return response
+
+
 
 # ---------------------------------------------------------
 # Start der Flask-App

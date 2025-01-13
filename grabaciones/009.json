@@ -1,0 +1,1215 @@
+{
+    "metadata": {
+            "Code": "009",
+            "Filename": "009.mp3",
+            "BirthYear": "2004",
+            "Gender": "w",
+            "Degree": "BA Medienwissenschaft (HF), Spanisch (NF)",
+            "ResidencesPrevious": "Mainz",
+            "Residence": "Marburg",
+            "Graduation": "Abitur",
+            "ExperienceAbroad": "",
+            "L1": "Deutsch",
+            "L1Additional": "",
+            "L2_3Spanish": "A2",
+            "L2": "Englisch (B2/C1)",
+            "L3": "Italienisch (über Großmutter)",
+            "L4": "",
+            "FatherL1": "Deutsch",
+            "FatherL2_3": "Englisch",
+            "FatherProfession": "Betriebsprüfer",
+            "MotherL1": "Deutsch",
+            "MotherL2_3": "Italienisch, Englisch",
+            "MotherProfession": "MTA",
+            "RecordingDate": "2024-01-16",
+            "Interviewer": "FT"
+        },
+    "startTimeOffset": 0,
+    "speakers": [
+        {
+            "spkid": "spk1",
+            "name": "Lista"
+        },
+        {
+            "spkid": "spk2",
+            "name": "Texto"
+        }
+    ],
+    "segments": [
+        {
+            "speaker": "spk1",
+            "words": [
+                {
+                    "start": 0.8,
+                    "end": 1.52,
+                    "text": "continúa",
+                    "number": "001"
+                },
+                {
+                    "start": 2,
+                    "end": 2.6,
+                    "text": "reloj",
+                    "number": "002"
+                },
+                {
+                    "start": 3.17,
+                    "end": 3.83,
+                    "text": "viuda",
+                    "number": "003"
+                },
+                {
+                    "start": 4.37,
+                    "end": 5.06,
+                    "text": "tabúes",
+                    "number": "004"
+                },
+                {
+                    "start": 5.69,
+                    "end": 6.65,
+                    "text": "estudiéis",
+                    "number": "005"
+                },
+                {
+                    "start": 7.25,
+                    "end": 7.94,
+                    "text": "querría",
+                    "number": "006"
+                },
+                {
+                    "start": 8.63,
+                    "end": 9.32,
+                    "text": "caída",
+                    "number": "007"
+                },
+                {
+                    "start": 9.86,
+                    "end": 10.55,
+                    "text": "pacto",
+                    "number": "008"
+                },
+                {
+                    "start": 11.03,
+                    "end": 11.54,
+                    "text": "miau",
+                    "number": "009"
+                },
+                {
+                    "start": 12.35,
+                    "end": 12.83,
+                    "text": "chalet",
+                    "number": "010"
+                },
+                {
+                    "start": 13.97,
+                    "end": 14.6,
+                    "text": "jinete",
+                    "number": "011"
+                },
+                {
+                    "start": 15.38,
+                    "end": 16.07,
+                    "text": "rehusa",
+                    "number": "012"
+                },
+                {
+                    "start": 16.52,
+                    "end": 17.3,
+                    "text": "numeró",
+                    "number": "013"
+                },
+                {
+                    "start": 17.69,
+                    "end": 18.35,
+                    "text": "toros",
+                    "number": "014"
+                },
+                {
+                    "start": 19.31,
+                    "end": 19.7,
+                    "text": "guau",
+                    "number": "015"
+                },
+                {
+                    "start": 20.21,
+                    "end": 20.78,
+                    "text": "muy",
+                    "number": "016"
+                },
+                {
+                    "start": 21.26,
+                    "end": 21.83,
+                    "text": "flor",
+                    "number": "017"
+                },
+                {
+                    "start": 22.49,
+                    "end": 22.94,
+                    "text": "ríe",
+                    "number": "018"
+                },
+                {
+                    "start": 23.75,
+                    "end": 24.14,
+                    "text": "hoy",
+                    "number": "019"
+                },
+                {
+                    "start": 24.83,
+                    "end": 25.49,
+                    "text": "juzgar",
+                    "number": "020"
+                },
+                {
+                    "start": 27.02,
+                    "end": 28.94,
+                    "text": "signo",
+                    "number": "021"
+                },
+                {
+                    "start": 29.69,
+                    "end": 30.35,
+                    "text": "labio",
+                    "number": "022"
+                },
+                {
+                    "start": 30.98,
+                    "end": 31.67,
+                    "text": "deuda",
+                    "number": "023"
+                },
+                {
+                    "start": 32.6,
+                    "end": 33.17,
+                    "text": "queja",
+                    "number": "024"
+                },
+                {
+                    "start": 33.86,
+                    "end": 34.49,
+                    "text": "ketchup",
+                    "number": "025"
+                },
+                {
+                    "start": 35.69,
+                    "end": 36.32,
+                    "text": "o hay",
+                    "number": "026"
+                },
+                {
+                    "start": 37.04,
+                    "end": 37.73,
+                    "text": "ladrón",
+                    "number": "027"
+                },
+                {
+                    "start": 38.27,
+                    "end": 38.69,
+                    "text": "club",
+                    "number": "028"
+                },
+                {
+                    "start": 39.79,
+                    "end": 40.45,
+                    "text": "vainilla",
+                    "number": "029"
+                },
+                {
+                    "start": 40.96,
+                    "end": 41.77,
+                    "text": "la papa",
+                    "number": "030"
+                },
+                {
+                    "start": 42.82,
+                    "end": 43.72,
+                    "text": "iceberg",
+                    "number": "031"
+                },
+                {
+                    "start": 44.35,
+                    "end": 45.16,
+                    "text": "número",
+                    "number": "032"
+                },
+                {
+                    "start": 45.64,
+                    "end": 46.33,
+                    "text": "vacuo",
+                    "number": "033"
+                },
+                {
+                    "start": 47.57,
+                    "end": 48.26,
+                    "text": "ángel",
+                    "number": "034"
+                },
+                {
+                    "start": 48.89,
+                    "end": 49.7,
+                    "text": "afgano",
+                    "number": "035"
+                },
+                {
+                    "start": 51.08,
+                    "end": 51.5,
+                    "text": "plan",
+                    "number": "036"
+                },
+                {
+                    "start": 52.1,
+                    "end": 53,
+                    "text": "la caza",
+                    "number": "037"
+                },
+                {
+                    "start": 54.08,
+                    "end": 54.8,
+                    "text": "logro",
+                    "number": "038"
+                },
+                {
+                    "start": 55.61,
+                    "end": 57.02,
+                    "text": "un yunque",
+                    "number": "039"
+                },
+                {
+                    "start": 57.8,
+                    "end": 58.52,
+                    "text": "mismo",
+                    "number": "040"
+                },
+                {
+                    "start": 59.15,
+                    "end": 59.81,
+                    "text": "coñac",
+                    "number": "041"
+                },
+                {
+                    "start": 60.29,
+                    "end": 61.04,
+                    "text": "el vino",
+                    "number": "042"
+                },
+                {
+                    "start": 61.79,
+                    "end": 62.72,
+                    "text": "admirar",
+                    "number": "043"
+                },
+                {
+                    "start": 63.02,
+                    "end": 63.98,
+                    "text": "un sueño",
+                    "number": "044"
+                },
+                {
+                    "start": 64.58,
+                    "end": 65.03,
+                    "text": "buey",
+                    "number": "045"
+                },
+                {
+                    "start": 65.9,
+                    "end": 67.25,
+                    "text": "él vino",
+                    "number": "046"
+                },
+                {
+                    "start": 67.52,
+                    "end": 68.24,
+                    "text": "tengo",
+                    "number": "047"
+                },
+                {
+                    "start": 68.66,
+                    "end": 69.44,
+                    "text": "montón",
+                    "number": "048"
+                },
+                {
+                    "start": 69.98,
+                    "end": 70.58,
+                    "text": "álbum",
+                    "number": "049"
+                },
+                {
+                    "start": 72.14,
+                    "end": 73.91,
+                    "text": "esdrújulo",
+                    "number": "050"
+                },
+                {
+                    "start": 75.26,
+                    "end": 75.66,
+                    "text": "bou",
+                    "number": "051"
+                },
+                {
+                    "start": 76.7,
+                    "end": 78.5,
+                    "text": "yo lo sé",
+                    "number": "052"
+                },
+                {
+                    "start": 79.22,
+                    "end": 80.03,
+                    "text": "un chico",
+                    "number": "053"
+                },
+                {
+                    "start": 80.54,
+                    "end": 81.23,
+                    "text": "algo",
+                    "number": "054"
+                },
+                {
+                    "start": 81.71,
+                    "end": 82.31,
+                    "text": "diurno",
+                    "number": "055"
+                },
+                {
+                    "start": 82.88,
+                    "end": 83.42,
+                    "text": "ahí",
+                    "number": "056"
+                },
+                {
+                    "start": 83.9,
+                    "end": 84.74,
+                    "text": "la tapa",
+                    "number": "057"
+                },
+                {
+                    "start": 85.28,
+                    "end": 86.09,
+                    "text": "enfermo",
+                    "number": "058"
+                },
+                {
+                    "start": 86.54,
+                    "end": 87.23,
+                    "text": "diablo",
+                    "number": "059"
+                },
+                {
+                    "start": 87.86,
+                    "end": 88.55,
+                    "text": "caudal",
+                    "number": "060"
+                },
+                {
+                    "start": 88.88,
+                    "end": 89.57,
+                    "text": "nadie",
+                    "number": "061"
+                },
+                {
+                    "start": 91.16,
+                    "end": 92,
+                    "text": "¡TÓMATELO!",
+                    "number": "062"
+                },
+                {
+                    "start": 92.78,
+                    "end": 93.44,
+                    "text": "causa",
+                    "number": "063"
+                },
+                {
+                    "start": 94.37,
+                    "end": 94.82,
+                    "text": "búho",
+                    "number": "064"
+                },
+                {
+                    "start": 95.45,
+                    "end": 96.29,
+                    "text": "la tira",
+                    "number": "065"
+                },
+                {
+                    "start": 96.8,
+                    "end": 97.46,
+                    "text": "llave",
+                    "number": "066"
+                },
+                {
+                    "start": 98.03,
+                    "end": 98.6,
+                    "text": "perro",
+                    "number": "067"
+                },
+                {
+                    "start": 99.29,
+                    "end": 99.95,
+                    "text": "caldo",
+                    "number": "068"
+                },
+                {
+                    "start": 100.4,
+                    "end": 101.45,
+                    "text": "suntuoso",
+                    "number": "069"
+                },
+                {
+                    "start": 102.23,
+                    "end": 102.89,
+                    "text": "guante",
+                    "number": "070"
+                },
+                {
+                    "start": 104.05,
+                    "end": 106.18,
+                    "text": "cuidar",
+                    "number": "071"
+                },
+                {
+                    "start": 106.9,
+                    "end": 107.56,
+                    "text": "óptimo",
+                    "number": "072"
+                },
+                {
+                    "start": 108.37,
+                    "end": 109,
+                    "text": "ñandú",
+                    "number": "073"
+                },
+                {
+                    "start": 109.54,
+                    "end": 110.08,
+                    "text": "baile",
+                    "number": "074"
+                },
+                {
+                    "start": 110.8,
+                    "end": 111.43,
+                    "text": "drama",
+                    "number": "075"
+                },
+                {
+                    "start": 112.15,
+                    "end": 112.81,
+                    "text": "vienes",
+                    "number": "076"
+                },
+                {
+                    "start": 113.26,
+                    "end": 114.16,
+                    "text": "gracias",
+                    "number": "077"
+                },
+                {
+                    "start": 114.73,
+                    "end": 115.42,
+                    "text": "oído",
+                    "number": "078"
+                },
+                {
+                    "start": 115.84,
+                    "end": 116.74,
+                    "text": "la casa",
+                    "number": "079"
+                },
+                {
+                    "start": 117.43,
+                    "end": 118.18,
+                    "text": "ración",
+                    "number": "080"
+                },
+                {
+                    "start": 118.6,
+                    "end": 119.62,
+                    "text": "tan blanco",
+                    "number": "081"
+                },
+                {
+                    "start": 120.01,
+                    "end": 122.11,
+                    "text": "ciempíes",
+                    "number": "082"
+                },
+                {
+                    "start": 122.8,
+                    "end": 123.67,
+                    "text": "deshielo",
+                    "number": "083"
+                },
+                {
+                    "start": 124.57,
+                    "end": 125.44,
+                    "text": "muchacho",
+                    "number": "084"
+                },
+                {
+                    "start": 125.8,
+                    "end": 126.37,
+                    "text": "salud",
+                    "number": "085"
+                },
+                {
+                    "start": 127.36,
+                    "end": 127.84,
+                    "text": "palas",
+                    "number": "086"
+                },
+                {
+                    "start": 128.74,
+                    "end": 129.49,
+                    "text": "rosbif",
+                    "number": "087"
+                },
+                {
+                    "start": 130.15,
+                    "end": 130.96,
+                    "text": "pastel",
+                    "number": "088"
+                },
+                {
+                    "start": 131.35,
+                    "end": 132.16,
+                    "text": "con agua",
+                    "number": "089"
+                },
+                {
+                    "start": 132.61,
+                    "end": 133.33,
+                    "text": "quería",
+                    "number": "090"
+                },
+                {
+                    "start": 133.72,
+                    "end": 134.2,
+                    "text": "paz",
+                    "number": "091"
+                },
+                {
+                    "start": 135.19,
+                    "end": 135.94,
+                    "text": "étnico",
+                    "number": "092"
+                },
+                {
+                    "start": 136.54,
+                    "end": 137.2,
+                    "text": "champán",
+                    "number": "093"
+                },
+                {
+                    "start": 137.98,
+                    "end": 138.55,
+                    "text": "honra",
+                    "number": "094"
+                },
+                {
+                    "start": 138.88,
+                    "end": 139.57,
+                    "text": "un tío",
+                    "number": "095"
+                },
+                {
+                    "start": 140.47,
+                    "end": 141.19,
+                    "text": "obtiene",
+                    "number": "096"
+                },
+                {
+                    "start": 141.49,
+                    "end": 142.39,
+                    "text": "la quita",
+                    "number": "097"
+                },
+                {
+                    "start": 142.66,
+                    "end": 143.32,
+                    "text": "baúl",
+                    "number": "098"
+                },
+                {
+                    "start": 143.8,
+                    "end": 144.64,
+                    "text": "la pita",
+                    "number": "099"
+                },
+                {
+                    "start": 145.15,
+                    "end": 145.78,
+                    "text": "pero",
+                    "number": "100"
+                },
+                {
+                    "start": 145.99,
+                    "end": 146.83,
+                    "text": "la capa",
+                    "number": "101"
+                },
+                {
+                    "start": 147.34,
+                    "end": 147.85,
+                    "text": "oye",
+                    "number": "102"
+                },
+                {
+                    "start": 148.45,
+                    "end": 149.2,
+                    "text": "reír",
+                    "number": "103"
+                },
+                {
+                    "start": 150,
+                    "end": 150.5,
+                    "text": "tenue",
+                    "number": "104"
+                },
+                {
+                    "start": 150.94,
+                    "end": 151.57,
+                    "text": "lleno",
+                    "number": "105"
+                },
+                {
+                    "start": 151.96,
+                    "end": 153.07,
+                    "text": "las casas",
+                    "number": "106"
+                },
+                {
+                    "start": 153.58,
+                    "end": 154.45,
+                    "text": "Europa",
+                    "number": "107"
+                },
+                {
+                    "start": 154.84,
+                    "end": 155.44,
+                    "text": "allí",
+                    "number": "108"
+                },
+                {
+                    "start": 156.17,
+                    "end": 156.74,
+                    "text": "numero",
+                    "number": "109"
+                },
+                {
+                    "start": 157,
+                    "end": 158.08,
+                    "text": "los otros",
+                    "number": "110"
+                },
+                {
+                    "start": 158.59,
+                    "end": 159.4,
+                    "text": "cambiáis",
+                    "number": "111"
+                },
+                {
+                    "start": 160.15,
+                    "end": 160.69,
+                    "text": "virrey",
+                    "number": "112"
+                },
+                {
+                    "start": 161.5,
+                    "end": 162.58,
+                    "text": "diurético",
+                    "number": "113"
+                },
+                {
+                    "start": 163.03,
+                    "end": 163.75,
+                    "text": "numero",
+                    "number": "114"
+                },
+                {
+                    "start": 164.2,
+                    "end": 165.01,
+                    "text": "número",
+                    "number": "115"
+                },
+                {
+                    "start": 165.34,
+                    "end": 166.06,
+                    "text": "numeró",
+                    "number": "116"
+                },
+                {
+                    "start": 166.57,
+                    "end": 167.59,
+                    "text": "la caza",
+                    "number": "117"
+                },
+                {
+                    "start": 167.62,
+                    "end": 168.58,
+                    "text": "la casa",
+                    "number": "118"
+                },
+                {
+                    "start": 168.88,
+                    "end": 169.99,
+                    "text": "las casas",
+                    "number": "119"
+                },
+                {
+                    "start": 170.17,
+                    "end": 170.77,
+                    "text": "ahí",
+                    "number": "120"
+                },
+                {
+                    "start": 171.1,
+                    "end": 171.7,
+                    "text": "allí",
+                    "number": "121"
+                },
+                {
+                    "start": 172.33,
+                    "end": 172.96,
+                    "text": "pero",
+                    "number": "122"
+                },
+                {
+                    "start": 173.32,
+                    "end": 173.92,
+                    "text": "perro",
+                    "number": "123"
+                },
+                {
+                    "start": 174.52,
+                    "end": 175.06,
+                    "text": "barón",
+                    "number": "124"
+                },
+                {
+                    "start": 175.48,
+                    "end": 176.05,
+                    "text": "varón",
+                    "number": "125"
+                }
+            ]
+        },
+        {
+            "speaker": "spk2",
+            "words": [
+                {
+                    "start": 179.31,
+                    "end": 183.81,
+                    "text": "El segundo planeta estaba habitado por un vanidoso:",
+                    "number": "s01"
+                },
+                {
+                    "start": 184.17,
+                    "end": 185.19,
+                    "text": "–¡Ah! ¡Ah!",
+                    "number": "s02"
+                },
+                {
+                    "start": 185.28,
+                    "end": 187.59,
+                    "text": "¡Un admirador viene a visitarme!",
+                    "number": "s03"
+                },
+                {
+                    "start": 187.98,
+                    "end": 189.78,
+                    "text": "–Gritó el vanidoso",
+                    "number": "s04"
+                },
+                {
+                    "start": 189.9,
+                    "end": 193.35,
+                    "text": "al divisar a lo lejos al principito.",
+                    "number": "s05"
+                },
+                {
+                    "start": 193.71,
+                    "end": 195.12,
+                    "text": "Para los vanidosos",
+                    "number": "s06"
+                },
+                {
+                    "start": 195.12,
+                    "end": 198.18,
+                    "text": "todos los demás hombres son admiradores.",
+                    "number": "s07"
+                },
+                {
+                    "start": 198.48,
+                    "end": 199.53,
+                    "text": "–¡Buenos días!",
+                    "number": "s08"
+                },
+                {
+                    "start": 199.53,
+                    "end": 201.21,
+                    "text": "–dijo el principito-.",
+                    "number": "s09"
+                },
+                {
+                    "start": 201.84,
+                    "end": 204.3,
+                    "text": "¡Qué sombrero tan raro tiene!",
+                    "number": "s10"
+                },
+                {
+                    "start": 204.87,
+                    "end": 207.33,
+                    "text": "–Es para saludar a los que me aclaman",
+                    "number": "s11"
+                },
+                {
+                    "start": 208.11,
+                    "end": 210.15,
+                    "text": "–respondió el vanidoso.",
+                    "number": "s12"
+                },
+                {
+                    "start": 210.54,
+                    "end": 211.86,
+                    "text": "Desgraciadamente",
+                    "number": "s13"
+                },
+                {
+                    "start": 212.01,
+                    "end": 213.93,
+                    "text": "nunca pasa nadie por aquí.",
+                    "number": "s14"
+                },
+                {
+                    "start": 214.35,
+                    "end": 214.92,
+                    "text": "–¿Ah, sí?",
+                    "number": "s15"
+                },
+                {
+                    "start": 215.1,
+                    "end": 217.92,
+                    "text": "–preguntó sin comprender el principito.",
+                    "number": "s16"
+                },
+                {
+                    "start": 218.46,
+                    "end": 219.57,
+                    "text": "–¿Tú me admiras mucho,",
+                    "number": "s17"
+                },
+                {
+                    "start": 219.57,
+                    "end": 220.14,
+                    "text": "verdad?",
+                    "number": "s18"
+                },
+                {
+                    "start": 220.38,
+                    "end": 223.08,
+                    "text": "–preguntó el vanidoso al principito.",
+                    "number": "s19"
+                },
+                {
+                    "start": 223.29,
+                    "end": 224.79,
+                    "text": "–¿Qué significa admirar?",
+                    "number": "s20"
+                },
+                {
+                    "start": 225.3,
+                    "end": 227.49,
+                    "text": "–Admirar significa reconocer",
+                    "number": "s21"
+                },
+                {
+                    "start": 227.49,
+                    "end": 230.1,
+                    "text": "que yo soy el hombre más bello,",
+                    "number": "s22"
+                },
+                {
+                    "start": 230.46,
+                    "end": 231.81,
+                    "text": "el mejor vestido,",
+                    "number": "s23"
+                },
+                {
+                    "start": 231.81,
+                    "end": 233.07,
+                    "text": "el más rico",
+                    "number": "s24"
+                },
+                {
+                    "start": 233.07,
+                    "end": 234.96,
+                    "text": "y el más inteligente del planeta.",
+                    "number": "s25"
+                },
+                {
+                    "start": 235.62,
+                    "end": 238.86,
+                    "text": "–¡Si tú estás solo en tu planeta!",
+                    "number": "s26"
+                },
+                {
+                    "start": 239.67,
+                    "end": 240.84,
+                    "text": "–¡Hazme ese favor,",
+                    "number": "s27"
+                },
+                {
+                    "start": 242.52,
+                    "end": 244.23,
+                    "text": "admírame de todas maneras!",
+                    "number": "s28"
+                },
+                {
+                    "start": 244.74,
+                    "end": 245.34,
+                    "text": "–¡Bueno!",
+                    "number": "s29"
+                },
+                {
+                    "start": 245.34,
+                    "end": 246.12,
+                    "text": "Te admiro",
+                    "number": "s30"
+                },
+                {
+                    "start": 246.15,
+                    "end": 250.2,
+                    "text": "–dijo el principito encogiéndose de hombros–,",
+                    "number": "s31"
+                },
+                {
+                    "start": 251.07,
+                    "end": 252.87,
+                    "text": "pero ¿para qué te sirve?",
+                    "number": "s32"
+                },
+                {
+                    "start": 253.86,
+                    "end": 255.93,
+                    "text": "Y el principito se marchó.",
+                    "number": "s33"
+                },
+                {
+                    "start": 257.4,
+                    "end": 258.57,
+                    "text": "“Decididamente,",
+                    "number": "s34"
+                },
+                {
+                    "start": 258.6,
+                    "end": 261.51,
+                    "text": "las personas grandes son muy extrañas”,",
+                    "number": "s35"
+                },
+                {
+                    "start": 261.69,
+                    "end": 265.08,
+                    "text": "se decía para sí el principito durante su viaje.",
+                    "number": "s36"
+                },
+                {
+                    "start": 265.65,
+                    "end": 269.91,
+                    "text": "El planeta siguiente estaba habitado por un bebedor.",
+                    "number": "s37"
+                },
+                {
+                    "start": 270.27,
+                    "end": 272.1,
+                    "text": "Fue una visita muy corta,",
+                    "number": "s38"
+                },
+                {
+                    "start": 272.1,
+                    "end": 272.52,
+                    "text": "pues,",
+                    "number": "s39"
+                },
+                {
+                    "start": 273.45,
+                    "end": 277.74,
+                    "text": "hundió al principito en una gran melancolía.",
+                    "number": "s40"
+                },
+                {
+                    "start": 278.13,
+                    "end": 279.09,
+                    "text": "–¡Buenos días!",
+                    "number": "s41"
+                },
+                {
+                    "start": 279.09,
+                    "end": 280.08,
+                    "text": "¿Qué haces ahí?",
+                    "number": "s42"
+                },
+                {
+                    "start": 280.5,
+                    "end": 282.03,
+                    "text": "–preguntó al bebedor",
+                    "number": "s43"
+                },
+                {
+                    "start": 282.03,
+                    "end": 284.31,
+                    "text": "que estaba sentado en silencio",
+                    "number": "s44"
+                },
+                {
+                    "start": 284.31,
+                    "end": 288.21,
+                    "text": "ante un sinnúmero de botellas vacías",
+                    "number": "s45"
+                },
+                {
+                    "start": 288.21,
+                    "end": 291,
+                    "text": "y otras tantas botellas llenas de ron.",
+                    "number": "s46"
+                },
+                {
+                    "start": 291.51,
+                    "end": 291.99,
+                    "text": "–¡Bebo!",
+                    "number": "s47"
+                },
+                {
+                    "start": 292.35,
+                    "end": 297.24,
+                    "text": "–respondió el bebedor con tono lúgubre.",
+                    "number": "s48"
+                },
+                {
+                    "start": 297.9,
+                    "end": 298.95,
+                    "text": "–¿Por qué bebes?",
+                    "number": "s49"
+                },
+                {
+                    "start": 299.25,
+                    "end": 302.04,
+                    "text": "–volvió a preguntar el principito.",
+                    "number": "s50"
+                },
+                {
+                    "start": 302.73,
+                    "end": 303.63,
+                    "text": "–Para olvidar.",
+                    "number": "s51"
+                },
+                {
+                    "start": 304.11,
+                    "end": 305.22,
+                    "text": "–¿Para olvidar qué?",
+                    "number": "s52"
+                },
+                {
+                    "start": 305.91,
+                    "end": 310.26,
+                    "text": "–inquirió el principito ya compadecido.",
+                    "number": "s53"
+                },
+                {
+                    "start": 310.5,
+                    "end": 313.59,
+                    "text": "–Para olvidar que siento vergüenza",
+                    "number": "s54"
+                },
+                {
+                    "start": 313.98,
+                    "end": 317.19,
+                    "text": "–confesó el bebedor bajando la cabeza.",
+                    "number": "s55"
+                },
+                {
+                    "start": 317.67,
+                    "end": 318.81,
+                    "text": "–¿Vergüenza de qué?",
+                    "number": "s56"
+                },
+                {
+                    "start": 319.11,
+                    "end": 324.2,
+                    "text": "–se informó el principito deseoso de ayudarle.",
+                    "number": "s57"
+                },
+                {
+                    "start": 324.75,
+                    "end": 326.31,
+                    "text": "–¡Vergüenza de beber!",
+                    "number": "s58"
+                },
+                {
+                    "start": 327.15,
+                    "end": 328.74,
+                    "text": "–concluyó el bebedor,",
+                    "number": "s59"
+                },
+                {
+                    "start": 328.74,
+                    "end": 335.01,
+                    "text": "que se encerró nueva y definitivamente en el silencio.",
+                    "number": "s60"
+                },
+                {
+                    "start": 335.37,
+                    "end": 336.03,
+                    "text": "–¡Ah, vale!",
+                    "number": "s61"
+                },
+                {
+                    "start": 336.24,
+                    "end": 336.81,
+                    "text": "¡Adiós!",
+                    "number": "s62"
+                },
+                {
+                    "start": 337.14,
+                    "end": 338.7,
+                    "text": "–Y el principito,",
+                    "number": "s63"
+                },
+                {
+                    "start": 338.7,
+                    "end": 339.54,
+                    "text": "perplejo,",
+                    "number": "s64"
+                },
+                {
+                    "start": 339.54,
+                    "end": 340.2,
+                    "text": "se marchó.",
+                    "number": "s65"
+                },
+                {
+                    "start": 341.58,
+                    "end": 343.02,
+                    "text": "“No hay la menor duda",
+                    "number": "s66"
+                },
+                {
+                    "start": 343.02,
+                    "end": 345.9,
+                    "text": "de que las personas mayores son muy extrañas”,",
+                    "number": "s67"
+                },
+                {
+                    "start": 346.17,
+                    "end": 350.46,
+                    "text": "seguía diciéndose para sí",
+                    "number": "s68"
+                },
+                {
+                    "start": 350.46,
+                    "end": 352.68,
+                    "text": "el principito durante su viaje.",
+                    "number": "s69"
+                }
+            ]
+        }
+    ],
+    "highlights": []
+}

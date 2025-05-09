@@ -1,6 +1,6 @@
 # MAR.ELE
 
-[![GitLab CI](https://gitlab.com/USERNAME/MAR.ELE/badges/main/pipeline.svg)](https://gitlab.com/USERNAME/MAR.ELE/-/pipelines)  
+[![GitLab CI](https://gitlab.uni-marburg.de/tackef/marele/badges/main/pipeline.svg)](https://gitlab.uni-marburg.de/tackef/marele/-/pipelines)  
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)]
 
 **MAR.ELE** ist ein Korpusprojekt zur Erforschung der Aussprache des Spanischen als Fremdsprache. Basierend auf Audioaufnahmen mit Studierenden der Universität Marburg, beinhaltet es sowohl Textlesungen als auch Wortlisten.* Das laufend erweiterte Korpus wird ausschließlich für linguistische und didaktische Zwecke veröffentlicht und ermöglicht systematische Studien zu Ausspracheproblemen und Kompetenzentwicklung.
@@ -24,7 +24,7 @@
 
 1. Repository klonen und Docker-Container starten:  
    ```bash
-   git clone https://gitlab.com/USERNAME/MAR.ELE.git
+   git clone https://gitlab.uni-marburg.de/tackef/marele.git
    cd MAR.ELE
    docker-compose up --build
    ```  

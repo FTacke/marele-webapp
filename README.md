@@ -34,7 +34,7 @@
 ## Zitation
 
 Bitte zitieren Sie das Corpus als:  
-Tacke, F., Haas, S. et al. (2025). **MAR.ELE – Korpus zur Erforschung der Aussprache des Spanischen als Fremdsprache**. Universität Marburg. DOI: wird vergeben.
+Tacke, F. (2025–). **MAR.ELE – Korpus zur Erforschung der Aussprache des Spanischen als Fremdsprache**. Universität Marburg. DOI: wird vergeben.
 
 ## Credits
 

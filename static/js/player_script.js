@@ -1,829 +1,632 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
+  // ---------------------------------------------------
+  // 0) Globale Hilfsfunktionen
+  // ---------------------------------------------------
+  function formatTime(timeInSeconds) {
+    const hours   = Math.floor(timeInSeconds / 3600);
+    const minutes = Math.floor((timeInSeconds % 3600) / 60);
+    const seconds = Math.floor(timeInSeconds % 60);
+    return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+  }
+
+  function pad(num) {
+    return num < 10 ? '0' + num : num.toString();
+  }
+
+  function isElementInViewport(element) {
+    const rect = element.getBoundingClientRect();
+    return (
+      rect.top >= 0 &&
+      rect.left >= 0 &&
+      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
+  }
+
+  // ---------------------------------------------------
+  // 1) URL-Parameter (audio/transcription)
+  // ---------------------------------------------------
   const urlParams = new URLSearchParams(window.location.search);
   const transcriptionFile = urlParams.get('transcription');
-  const audioFile = urlParams.get('audio');
-
+  const audioFile         = urlParams.get('audio');
 
   console.log('Transcription File:', transcriptionFile);
   console.log('Audio File:', audioFile);
 
-  const transcriptionContainer = document.getElementById('transcriptionContainer');
-  const metadataList = document.getElementById('metadataList');
+  // ---------------------------------------------------
+  // 2) Zentrale DOM-Elemente
+  // ---------------------------------------------------
+  const audioPlayer      = document.getElementById('audioPlayer');
+  const transcriptionEl  = document.getElementById('transcriptionContainer');
+  const documentNameEl   = document.getElementById('documentName');
 
-  if (!transcriptionContainer || !metadataList) {
-    console.error('HTML-Container transcriptionContainer oder metadataList nicht gefunden.');
-    return;
+  // Player Controls
+  const playPauseBtn     = document.getElementById('playPauseBtn');
+  const rewindBtn        = document.getElementById('rewindBtn');
+  const forwardBtn       = document.getElementById('forwardBtn');
+  const progressBar      = document.getElementById('progressBar');
+  const volumeControl    = document.getElementById('volumeControl');
+  const muteBtn          = document.getElementById('muteBtn');
+  const speedControl     = document.getElementById('speedControlSlider');
+  const speedDisplay     = document.getElementById('speedDisplay');
+  const timeDisplay      = document.getElementById('timeDisplay');
+
+  // Buchstabenmarkierung
+  const markInput        = document.getElementById('markInput');
+  const resetAllButton   = document.getElementById('resetMarkingsButton');
+  const buttonsContainer = document.getElementById('buttonsContainer');
+
+  // Scroll-to-top
+  const scrollToTopBtn   = document.getElementById('scrollToTopBtn');
+
+  // ---------------------------------------------------
+  // 3) Download-Links für MP3, JSON, TXT
+  // ---------------------------------------------------
+  function createDownloadLink(elementId, fileUrl, fileType) {
+    const element = document.getElementById(elementId);
+    if (element && fileUrl) {
+      element.href = fileUrl;
+      element.download = `export.${fileType}`;
+    }
   }
-  const markInput = document.getElementById('markInput');
-  markInput.addEventListener('keyup', function(event) {
-    if (event.key === 'Enter') {
+
+  createDownloadLink('downloadMp3', audioFile, 'mp3');
+  createDownloadLink('downloadJson', transcriptionFile, 'json');
+
+  function downloadTxtFile() {
+    const metaInfo = document.getElementById('sidebarContainer-meta')
+      ? document.getElementById('sidebarContainer-meta').innerText
+      : '';
+    const transcriptionText = transcriptionEl ? transcriptionEl.innerText : '';
+    const fullText = metaInfo + "\n\n" + transcriptionText;
+    let filename = 'export';
+    if (audioPlayer && audioPlayer.src) {
+      const audioUrl = audioPlayer.src;
+      filename = audioUrl.split('/').pop().split('.').slice(0, -1).join('.');
+    }
+    const textBlob     = new Blob([fullText], { type: 'text/plain' });
+    const downloadLink = document.createElement("a");
+    downloadLink.download = `${filename}.txt`;
+    downloadLink.href     = window.URL.createObjectURL(textBlob);
+    downloadLink.style.display = "none";
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+  }
+
+  const downloadTxtBtn = document.getElementById('downloadTxt');
+  if (downloadTxtBtn) {
+    downloadTxtBtn.addEventListener('click', downloadTxtFile);
+  }
+
+  // ---------------------------------------------------
+  // 4) Audio-Player-Initialisierung
+  // ---------------------------------------------------
+  if (audioFile && audioPlayer) {
+    audioPlayer.src = audioFile;
+  }
+
+  function updatePlayPauseButton() {
+    if (audioPlayer.paused || audioPlayer.ended) {
+      playPauseBtn.classList.remove('bi-pause-circle-fill');
+      playPauseBtn.classList.add('bi-play-circle-fill');
+    } else {
+      playPauseBtn.classList.remove('bi-play-circle-fill');
+      playPauseBtn.classList.add('bi-pause-circle-fill');
+    }
+  }
+
+  function updateTimeDisplay() {
+    if (!audioPlayer.duration) return;
+    const current = audioPlayer.currentTime;
+    const total   = audioPlayer.duration;
+    const cMin    = Math.floor(current / 60);
+    const cSec    = Math.floor(current % 60);
+    const dMin    = Math.floor(total / 60);
+    const dSec    = Math.floor(total % 60);
+    timeDisplay.textContent = `${pad(cMin)}:${pad(cSec)} / ${pad(dMin)}:${pad(dSec)}`;
+  }
+
+  playPauseBtn.addEventListener('click', function () {
+    if (audioPlayer.paused) {
+      audioPlayer.play();
+    } else {
+      audioPlayer.pause();
+    }
+    updatePlayPauseButton();
+  });
+
+  rewindBtn.addEventListener('click', function () {
+    audioPlayer.currentTime = Math.max(0, audioPlayer.currentTime - 3);
+    animateButton(rewindBtn);
+  });
+  forwardBtn.addEventListener('click', function () {
+    if (audioPlayer.duration) {
+      audioPlayer.currentTime = Math.min(audioPlayer.duration, audioPlayer.currentTime + 3);
+    }
+    animateButton(forwardBtn);
+  });
+
+  function animateButton(btn) {
+    btn.classList.add('fa-fade');
+    setTimeout(() => {
+      btn.classList.remove('fa-fade');
+    }, 1000);
+  }
+
+  document.addEventListener('keydown', (event) => {
+    if (!audioPlayer) return;
+    if (event.ctrlKey && event.key === ',') {
+      audioPlayer.currentTime = Math.max(0, audioPlayer.currentTime - 3);
+    }
+    if (event.ctrlKey && event.key === '.') {
+      if (audioPlayer.duration) {
+        audioPlayer.currentTime = Math.min(audioPlayer.duration, audioPlayer.currentTime + 3);
+      }
+    }
+    if (event.ctrlKey && event.code === 'Space') {
+      event.preventDefault();
+      if (audioPlayer.paused) {
+        audioPlayer.play();
+      } else {
+        audioPlayer.pause();
+      }
+      updatePlayPauseButton();
+    }
+  });
+
+  volumeControl.addEventListener('input', function() {
+    audioPlayer.volume = parseFloat(this.value);
+    updateVolumeIcon(audioPlayer.muted ? 0 : this.value);
+  });
+
+  muteBtn.addEventListener('click', function() {
+    audioPlayer.muted = !audioPlayer.muted;
+    updateVolumeIcon(volumeControl.value);
+  });
+
+  function updateVolumeIcon(volume) {
+    if (!audioPlayer.muted && volume > 0) {
+      muteBtn.classList.remove('fa-volume-xmark');
+      muteBtn.classList.add('fa-volume-high');
+    } else {
+      muteBtn.classList.remove('fa-volume-high');
+      muteBtn.classList.add('fa-volume-xmark');
+    }
+  }
+
+  speedControl.addEventListener('input', function() {
+    const spd = parseFloat(this.value);
+    audioPlayer.playbackRate = spd;
+    speedDisplay.textContent = `${spd.toFixed(1)}x`;
+  });
+
+  audioPlayer.addEventListener('timeupdate', function() {
+    if (audioPlayer.duration) {
+      progressBar.value = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+    }
+    updateTimeDisplay();
+
+    // Automatische Wort-Hervorhebung
+    const currentTime = audioPlayer.currentTime;
+    const words = document.querySelectorAll('.word');
+    words.forEach(word => {
+      const start = parseFloat(word.dataset.start);
+      const end   = parseFloat(word.dataset.end);
+      if (currentTime >= start && currentTime <= end) {
+        word.classList.add('playing');
+        if (!isElementInViewport(word)) {
+          word.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      } else {
+        word.classList.remove('playing');
+      }
+    });
+  });
+
+  progressBar.addEventListener('input', function() {
+    if (audioPlayer.duration) {
+      audioPlayer.currentTime = (this.value / 100) * audioPlayer.duration;
+    }
+  });
+
+  audioPlayer.addEventListener('play', updatePlayPauseButton);
+  audioPlayer.addEventListener('pause', updatePlayPauseButton);
+  audioPlayer.addEventListener('loadedmetadata', updateTimeDisplay);
+
+  // ---------------------------------------------------
+  // 5) Transcription + Metadaten (marele-Struktur)
+  // ---------------------------------------------------
+function loadTranscription(fileUrl) {
+  if (!fileUrl) return;
+  fetch(fileUrl)
+    .then(r => r.json())
+    .then(data => {
+      if (data.filename) {
+        documentNameEl.innerHTML = "Informante <span>" + 
+          data.filename + 
+          (data.metadata && data.metadata.L2_3Spanish ? " (" + data.metadata.L2_3Spanish + ")" : "") +
+          "</span>";
+      } else if (data.metadata && data.metadata.Code) {
+        documentNameEl.innerHTML = "Informante <span>" + data.metadata.Code + "</span>";
+      } else {  
+        documentNameEl.textContent = "Sin archivo";
+      }
+
+        // B) Metadaten füllen
+        setMetadata(data);
+
+        // C) Transkription aufbauen
+        transcriptionEl.innerHTML = '';
+        if (!data.segments || !Array.isArray(data.segments)) {
+          console.warn("Keine segments gefunden.");
+          return;
+        }
+
+        data.segments.forEach((segment, idx) => {
+          const segmentDiv = document.createElement('div');
+          if (idx === 0) segmentDiv.classList.add('transcription-list');
+          else if (idx === 1) segmentDiv.classList.add('transcription-text');
+          else segmentDiv.classList.add('transcription');
+
+          const wordsArr = segment.words || [];
+
+          // Zuerst: Sprechername (speaker-label)
+          let speakerName = "Desconocido";
+          if (data.speakers && Array.isArray(data.speakers)) {
+            const foundSpk = data.speakers.find(sp => sp.spkid === segment.speaker);
+            if (foundSpk && foundSpk.name) {
+              speakerName = foundSpk.name;
+            }
+          }
+          const speakerLabel = document.createElement('div');
+          speakerLabel.classList.add('speaker-label');
+          speakerLabel.textContent = speakerName;
+          // Klick auf Sprecher => Segment abspielen
+          speakerLabel.addEventListener('click', () => {
+            if (wordsArr.length > 0) {
+              playAudioSegment(wordsArr[0].start, wordsArr[wordsArr.length - 1].end, true);
+            }
+          });
+          segmentDiv.appendChild(speakerLabel);
+
+          // Dann: Zeitangabe unter dem Sprecher-Label
+          if (wordsArr.length > 0) {
+            const st = wordsArr[0].start;
+            const en = wordsArr[wordsArr.length - 1].end;
+            const speakerTimeEl = document.createElement('div');
+            speakerTimeEl.classList.add('speaker-time');
+            speakerTimeEl.textContent = `${formatTime(st)} - ${formatTime(en)}`;
+            segmentDiv.appendChild(speakerTimeEl);
+          }
+
+          // Anschließend: Wort-für-Wort-Darstellung
+          wordsArr.forEach((wordObj, wIndex) => {
+            const wordContainer = document.createElement('div');
+            wordContainer.classList.add('word-container');
+
+            const numberSpan = document.createElement('span');
+            numberSpan.classList.add('word-number');
+            const wordNum = wordObj.number || (wIndex + 1);
+            const paddedNum = String(wordNum).padStart(3, '0');
+            numberSpan.textContent = paddedNum + ' ';
+            wordContainer.appendChild(numberSpan);
+
+            const wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.textContent = wordObj.text + ' ';
+            wordSpan.dataset.start = wordObj.start;
+            wordSpan.dataset.end   = wordObj.end;
+            wordSpan.addEventListener('click', function(evt) {
+              evt.stopPropagation();
+              if (evt.ctrlKey) {
+                playAudioSegment(wordObj.start, wordObj.end, false);
+              } else {
+                playAudioSegment(wordObj.start, wordObj.end, true);
+              }
+            });
+            wordContainer.appendChild(wordSpan);
+
+            segmentDiv.appendChild(wordContainer);
+          });
+
+          transcriptionEl.appendChild(segmentDiv);
+        });
+      })
+      .catch(err => console.error('Fehler beim Laden der Transkription:', err));
+  }
+
+  function playAudioSegment(startTime, endTime, shouldPause) {
+    if (!audioPlayer) return;
+    audioPlayer.currentTime = startTime;
+    audioPlayer.play();
+    const onTimeUpdate = () => {
+      if (audioPlayer.currentTime >= endTime) {
+        if (shouldPause) {
+          audioPlayer.pause();
+        }
+        audioPlayer.removeEventListener('timeupdate', onTimeUpdate);
+      }
+    };
+    audioPlayer.addEventListener('timeupdate', onTimeUpdate);
+  }
+
+  function setMetadata(data) {
+    const codeEl               = document.getElementById('code');
+    const genderEl             = document.getElementById('gender');
+    const l1El                 = document.getElementById('l1');
+    const experienceAbroadEl   = document.getElementById('experienceAbroad');
+    const commentsEl           = document.getElementById('comments');
+    const spanishLevelEl       = document.getElementById('spanishLevel');
+    const recordingDateEl      = document.getElementById('recordingDate');
+    const filenameEl           = document.getElementById('filename');
+  
+    // Neue Felder:
+    const birthYearEl          = document.getElementById('birthYear');
+    const residencesPreviousEl = document.getElementById('residencesPrevious');
+    const l2l3El               = document.getElementById('l2l3');
+    const motherL1El           = document.getElementById('motherL1');
+    const fatherL1El           = document.getElementById('fatherL1');
+  
+    if (data.metadata) {
+      if (codeEl) {
+        codeEl.innerHTML = `Informante: <span class="metadata-value">${data.metadata.Code || '-'}</span>`;
+      }
+      if (genderEl) {
+        genderEl.innerHTML = `Género: <span class="metadata-value">${data.metadata.Gender || '-'}</span>`;
+      }
+      if (l1El) {
+        l1El.innerHTML = `Lengua L1: <span class="metadata-value">${data.metadata.L1 || '-'}</span>`;
+      }
+      if (experienceAbroadEl) {
+        experienceAbroadEl.innerHTML = `Estancias: <span class="metadata-value">${data.metadata.ExperienceAbroad || '-'}</span>`;
+      }
+      if (commentsEl) {
+        commentsEl.innerHTML = `Comentarios: <span class="metadata-value">${data.metadata.Comments || '-'}</span>`;
+      }
+      if (spanishLevelEl) {
+        spanishLevelEl.innerHTML = `Nivel de Español: <span class="metadata-value-L2_3Spanisch">${data.metadata.L2_3Spanish || '-'}</span>`;
+      }
+      if (recordingDateEl) {
+        recordingDateEl.innerHTML = `Fecha de Grabación: <span class="metadata-value">${data.metadata.RecordingDate || '-'}</span>`;
+      }
+      
+      // Neue Metadaten einfügen
+      if (birthYearEl) {
+        birthYearEl.innerHTML = `Nacido/a: <span class="metadata-value">${data.metadata.BirthYear || '-'}</span>`;
+      }
+      if (residencesPreviousEl) {
+        residencesPreviousEl.innerHTML = `Proveniencia: <span class="metadata-value">${data.metadata.ResidencesPrevious || '-'}</span>`;
+      }
+      if (l2l3El) {
+        let additionalLevels = [];
+        if (data.metadata.L2) additionalLevels.push(data.metadata.L2);
+        if (data.metadata.L3) additionalLevels.push(data.metadata.L3);
+        if (data.metadata.L4) additionalLevels.push(data.metadata.L4);
+        l2l3El.innerHTML = `L2/L3 adicionales: <span class="metadata-value">${additionalLevels.length ? additionalLevels.join(", ") : '-'}</span>`;
+      }
+      if (motherL1El) {
+        motherL1El.innerHTML = `L1/madre: <span class="metadata-value">${data.metadata.MotherL1 || '-'}</span>`;
+      }
+      if (fatherL1El) {
+        fatherL1El.innerHTML = `L1/padre: <span class="metadata-value">${data.metadata.FatherL1 || '-'}</span>`;
+      }
+    }
+  
+    if (filenameEl) {
+      if (data.filename) {
+        filenameEl.innerHTML = `Archivo (JSON): <span class="metadata-value">${data.filename}</span>`;
+      } else {
+        filenameEl.textContent = 'Archivo: N/A';
+      }
+    }
+  }
+  
+  
+
+  // ---------------------------------------------------
+  // 6) Markieren von Buchstaben
+  // ---------------------------------------------------
+  let matchCounts = {};
+
+  markInput.addEventListener('keyup', function(e) {
+    if (e.key === 'Enter') {
       markLetters();
     }
   });
 
-  let isPlaying = false;
+  window.markLetters = function() {
+    let searchInput = markInput.value.trim().toLowerCase();
+    if (!searchInput) return;
 
-  // Erstellung des neuen Audio-Players
-  const visualAudioPlayer = document.createElement('audio');
-  visualAudioPlayer.id = 'visualAudioPlayer';
-  document.querySelector('.custom-audio-player').prepend(visualAudioPlayer);
-  visualAudioPlayer.src = audioFile; // Stellen Sie sicher, dass 'audioFile' korrekt definiert ist
+    let markType = 'exact';
+    let searchQuery = searchInput;
+    let separatorRegex = /[ ,.?;]/;
 
-  // Funktion zum Laden und Anzeigen der Metadaten
-  function loadMetadata(transcriptionFile, metadataList) {
-    fetch(transcriptionFile)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`Fehler beim Laden der Metadaten: ${response.statusText}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        const metadata = data.metadata || {};
-
-        // Vorherige Inhalte löschen
-        metadataList.innerHTML = '';
-
-        // Metadaten einfügen (formatierte Anzeige mit <p>-Tags)
-        const codeElement = document.createElement('p');
-        codeElement.innerHTML = `Informante: <span style="color: #cb4316;">${metadata.Code || 'N/A'}</span>`;
-        metadataList.appendChild(codeElement);
-
-        const spanishLevelElement = document.createElement('p');
-        spanishLevelElement.innerHTML = `Nivel de Español: <span style="color: #cb4316;">${metadata.L2_3Spanish || 'N/A'}</span>`;
-        metadataList.appendChild(spanishLevelElement);
-
-        const recordingDateElement = document.createElement('p');
-        recordingDateElement.innerHTML = `Fecha de Grabación:<br> <span style="color: #cb4316;">${metadata.RecordingDate || 'N/A'}</span>`;
-        metadataList.appendChild(recordingDateElement);
-
-        console.log('Metadaten erfolgreich geladen.');
-      })
-      .catch(error => console.error('Fehler beim Laden der Metadaten:', error));
-  }
-
-  // Event-Listener für das Laden der Metadaten
-  visualAudioPlayer.addEventListener('loadedmetadata', function() {
-    // Aktualisieren Sie hier die Gesamtdauer des Audios
-    const durationMinutes = Math.floor(visualAudioPlayer.duration / 60) || 0;
-    const durationSeconds = Math.floor(visualAudioPlayer.duration % 60) || 0;
-
-    // Sicherstellen, dass das 'durationDisplay'-Element existiert
-    const durationDisplay = document.getElementById('durationDisplay');
-    if (durationDisplay) {
-      durationDisplay.textContent = `${pad(durationMinutes)}:${pad(durationSeconds)}`;
+    if (searchInput.endsWith('_')) {
+      markType = 'separator';
+      searchQuery = searchInput.slice(0, -1);
+      separatorRegex = /\s/;
+    } else if (searchInput.endsWith('#')) {
+      markType = 'punctuation';
+      searchQuery = searchInput.slice(0, -1);
+      separatorRegex = /[.,;!?]/;
     }
 
-    // Sicherstellen, dass das 'progressBar'-Element existiert
-    const progressBar = document.getElementById('progressBar');
-    if (progressBar) {
-      progressBar.value = 0;
-    }
-
-    // Sicherstellen, dass das 'timeDisplay'-Element existiert
-    const timeDisplay = document.getElementById('timeDisplay');
-    if (timeDisplay) {
-      timeDisplay.textContent = `00:00 / ${pad(durationMinutes)}:${pad(durationSeconds)}`;
-    }
-  });
-
-// Funktion zum Erstellen eines Download-Links
-function createDownloadLink(elementId, fileUrl, fileType) {
-  const element = document.getElementById(elementId);
-  if (element && fileUrl) {
-    element.href = fileUrl;
-    element.download = `export.${fileType}`;
-  }
-}
-
-// Links für MP3 und JSON setzen
-createDownloadLink('downloadMp3', audioFile, 'mp3');
-createDownloadLink('downloadJson', transcriptionFile, 'json');
-
-// TXT ERSTELLEN
-// TXT ERSTELLEN
-// TXT ERSTELLEN
-
-function downloadTxtFile() {
-  const metaInfo = document.getElementById('sidebarContainer-meta').innerText;
-  const transcriptionContent = document.getElementById('transcriptionContainer').innerText;
-  const fullText = metaInfo + "\n\n" + transcriptionContent;
-
-  // URL des Audiofiles holen und den Dateinamen extrahieren
-  const audioUrl = document.getElementById('visualAudioPlayer').src;
-  let filename = 'export';
-
-  if (audioUrl) {
-    // Audio-Dateiname ohne Erweiterung
-    filename = audioUrl.split('/').pop().split('.').slice(0, -1).join('.');
-  }
-
-  const textBlob = new Blob([fullText], { type: 'text/plain' });
-
-  const downloadLink = document.createElement("a");
-  downloadLink.download = `${filename}.txt`; // Verwenden des extrahierten Dateinamens
-  downloadLink.href = window.URL.createObjectURL(textBlob);
-  downloadLink.style.display = "none";
-  document.body.appendChild(downloadLink);
-
-  downloadLink.click();
-  document.body.removeChild(downloadLink);
-}
-
-document.getElementById('downloadTxt').addEventListener('click', downloadTxtFile);
-
-
-
-
-
-
-// AUDIO-PLAYER
-// AUDIO-PLAYER
-// AUDIO-PLAYER
-
-// Kontrollelemente
-const playPauseBtn = document.getElementById('playPauseBtn');
-const rewindBtn = document.getElementById('rewindBtn');
-const forwardBtn = document.getElementById('forwardBtn');
-const progressBar = document.getElementById('progressBar');
-const volumeControl = document.getElementById('volumeControl');
-const speedControlSlider = document.getElementById('speedControlSlider');
-const muteBtn = document.getElementById('muteBtn'); // Mute-Button
-const timeDisplay = document.getElementById('timeDisplay'); // Zeit-Anzeige
-const speedDisplay = document.getElementById('speedDisplay'); // Geschwindigkeitsanzeige
-
-// Funktion zur Aktualisierung des Play/Pause-Buttons
-function updatePlayPauseButton() {
-  const playPauseBtn = document.getElementById('playPauseBtn'); // Aktualisieren Sie die ID auf 'playPauseBtn'
-  if (visualAudioPlayer.paused || visualAudioPlayer.ended) {
-    // Wenn der Player pausiert ist oder beendet wurde, ändern Sie das Icon in "Play"
-    playPauseBtn.classList.remove('bi-pause-circle-fill');
-    playPauseBtn.classList.add('bi-play-circle-fill');
-  } else {
-    // Wenn der Player gerade spielt, ändern Sie das Icon in "Pause"
-    playPauseBtn.classList.remove('bi-play-circle-fill');
-    playPauseBtn.classList.add('bi-pause-circle-fill');
-  }
-}
-
-// Play/Pause-Funktionalität
-playPauseBtn.addEventListener('click', function() {
-  if (visualAudioPlayer.paused) {
-    visualAudioPlayer.play();
-    updatePlayPauseButton();
-  } else {
-    visualAudioPlayer.pause();
-    updatePlayPauseButton();
-  }
-});
-
-
-
-// Funktion zur Überprüfung, ob Strg + Leertaste gedrückt wurde
-function isCtrlSpacePressed(event) {
-  return event.ctrlKey && event.keyCode === 32; // 32 ist der Keycode für die Leertaste
-}
-
-
-
-// Vorwärts-/Rückwärts-Funktionalität
-rewindBtn.addEventListener('click', function() {
-  visualAudioPlayer.currentTime -= 3;
-});
-
-forwardBtn.addEventListener('click', function() {
-  visualAudioPlayer.currentTime += 3;
-});
-
-// Event-Listener für das Drücken von Strg + Komma
-document.addEventListener('keydown', function(event) {
-if (event.ctrlKey && event.key === ',') {
-  // Strg + Komma wurde gedrückt, führen Sie die Aktion für Rückwärts aus
-  visualAudioPlayer.currentTime -= 3;
-}
-});
-
-// Event-Listener für das Drücken von Strg + Punkt
-document.addEventListener('keydown', function(event) {
-if (event.ctrlKey && event.key === '.') {
-  // Strg + Punkt wurde gedrückt, führen Sie die Aktion für Vorwärts aus
-  visualAudioPlayer.currentTime += 3;
-}
-});
-
-
-rewindBtn.addEventListener('click', function() {
-  // Wechseln zu dem temporären Icon
-  rewindBtn.classList.remove('fa-rotate-left');
-  rewindBtn.classList.add('fa-rotate-left', 'fa-fade');
-
-  // Zurückwechseln zum ursprünglichen Icon nach einer kurzen Verzögerung
-  setTimeout(() => {
-      rewindBtn.classList.remove('fa-rotate-left', 'fa-fade');
-      rewindBtn.classList.add('fa-rotate-left');
-  }, 1000); // 500 Millisekunden Verzögerung
-});
-
-forwardBtn.addEventListener('click', function() {
-  // Wechseln zu dem temporären Icon
-  forwardBtn.classList.remove('fa-rotate-right');
-  forwardBtn.classList.add('fa-rotate-right', 'fa-fade');
-
-  // Zurückwechseln zum ursprünglichen Icon nach einer kurzen Verzögerung
-  setTimeout(() => {
-    forwardBtn.classList.remove('fa-rotate-right', 'fa-fade');
-    forwardBtn.classList.add('fa-rotate-right');
-  }, 1000); // 500 Millisekunden Verzögerung
-});
-
-
-// Lautstärkeregelung und Stummschaltung
-volumeControl.addEventListener('input', function() {
-    visualAudioPlayer.volume = this.value;
-    updateVolumeIcon(this.value);
-});
-
-muteBtn.addEventListener('click', function() {
-    visualAudioPlayer.muted = !visualAudioPlayer.muted;
-    updateVolumeIcon(volumeControl.value);
-});
-
-function updateVolumeIcon(volume) {
-    if (volume > 0) {
-        muteBtn.classList.remove('fa-volume-xmark');
-        muteBtn.classList.add('fa-volume-high');
-    } else {
-        muteBtn.classList.remove('fa-volume-high');
-        muteBtn.classList.add('fa-volume-xmark');
-    }
-}
-
-// Wiedergabegeschwindigkeitsregelung
-speedControlSlider.addEventListener('input', function() {
-    const speed = parseFloat(this.value);
-    visualAudioPlayer.playbackRate = speed;
-    speedDisplay.textContent = `${speed.toFixed(1)}x`;
-});
-
-// Fortschrittsanzeige und Zeitaktualisierung
-visualAudioPlayer.addEventListener('timeupdate', function() {
-    progressBar.value = (visualAudioPlayer.currentTime / visualAudioPlayer.duration) * 100;
-    updateTimeDisplay();
-});
-
-progressBar.addEventListener('input', function() {
-    visualAudioPlayer.currentTime = (this.value / 100) * visualAudioPlayer.duration;
-});
-
-// Funktion zur Aktualisierung der Zeit-Anzeige
-function updateTimeDisplay() {
-    const currentMinutes = Math.floor(visualAudioPlayer.currentTime / 60);
-    const currentSeconds = Math.floor(visualAudioPlayer.currentTime % 60);
-    const durationMinutes = Math.floor(visualAudioPlayer.duration / 60) || 0;
-    const durationSeconds = Math.floor(visualAudioPlayer.duration % 60) || 0;
-
-    timeDisplay.textContent = `${pad(currentMinutes)}:${pad(currentSeconds)} / ${pad(durationMinutes)}:${pad(durationSeconds)}`;
-}
-
-// Hilfsfunktion zum Hinzufügen führender Nullen
-function pad(number) {
-    return number < 10 ? '0' + number : number;
-}
-
-
-
-  
-
-  loadTranscription(transcriptionFile, transcriptionContainer);
-  loadMetadata(transcriptionFile, metadataList);
-
-  function loadTranscription(transcriptionFile, transcriptionContainer) {
-    fetch(transcriptionFile)
-        .then(response => response.json())
-        .then(transcriptionData => {
-            
-            const segments = transcriptionData.segments;
-
-            segments.forEach((segment, index) => {
-                const speakerId = segment.speaker;
-                const words = segment.words;
-
-                const transcriptionElement = document.createElement('div');
-                if (index === 0) {
-                    transcriptionElement.classList.add('transcription-list');
-                } else if (index === 1) {
-                    transcriptionElement.classList.add('transcription-text');
-                } else {
-                    transcriptionElement.classList.add('transcription');
-                }
-
-                const speakerInfo = transcriptionData.speakers.find(speaker => speaker.spkid === speakerId);
-                const speakerName = speakerInfo ? speakerInfo.name : "Unbekannter Sprecher";
-
-                const speakerStartTime = formatTime(words[0].start);
-                const speakerEndTime = formatTime(words[words.length - 1].end);
-
-                const speakerTimeElement = document.createElement('div');
-                speakerTimeElement.textContent = `${speakerStartTime} - ${speakerEndTime}`;
-                speakerTimeElement.classList.add('speaker-time');
-                transcriptionElement.appendChild(speakerTimeElement);
-
-                const speakerElement = document.createElement('span');
-                speakerElement.textContent = speakerName;
-                speakerElement.classList.add('speaker');
-                transcriptionElement.appendChild(speakerElement);
-
-                speakerElement.addEventListener('click', function() {
-                  const firstWordStartTime = words[0].start;
-                  const lastWordEndTime = words[words.length - 1].end;
-                  playVisualAudio(firstWordStartTime, lastWordEndTime, true);
-                  console.log(`Speaker: ${speakerName} Start: ${firstWordStartTime} End: ${lastWordEndTime}`);
-                });
-
-                speakerElement.addEventListener('click', function () {
-                  if (audioPlayer) {
-                    if (audioPlayer.paused || audioPlayer.ended) {
-                      audioPlayer.play();
-                    } else {
-                      audioPlayer.pause();
-                    }
-                    updatePlayPauseButton();
-                  }
-                });
-
-                function playVisualAudio(startTime, endTime, shouldPause) {
-                  if (visualAudioPlayer) {
-                    visualAudioPlayer.currentTime = startTime;
-                    visualAudioPlayer.play();
-
-                    // Aktualisieren des Play/Pause-Buttons
-                    updatePlayPauseButton();
-                
-                    const onTimeUpdate = function () {
-                      if (visualAudioPlayer.currentTime >= endTime) {
-                          if (shouldPause) {
-                              visualAudioPlayer.pause();
-                              visualAudioPlayer.removeEventListener('timeupdate', onTimeUpdate);
-          
-                              // Aktualisieren des Play/Pause-Buttons nach dem Pausieren
-                              updatePlayPauseButton();
-                          }
-                      }
-                  };
-          
-                  visualAudioPlayer.addEventListener('timeupdate', onTimeUpdate);
-              }
-          }
-
-                words.forEach((word, index) => {
-                    const wordContainer = document.createElement('div');
-                    wordContainer.classList.add('word-container');
-                    wordContainer.style.display = 'flex';
-                    wordContainer.style.alignItems = 'center';
-                    wordContainer.style.marginBottom = '5px';
-
-                    const numberElement = document.createElement('span');
-                    numberElement.textContent = word.number + ' ';
-                    numberElement.classList.add('word-number');
-                    numberElement.style.color = '#cb4316';
-                    numberElement.style.marginRight = '10px';
-                    wordContainer.appendChild(numberElement);
-
-                    const wordElement = document.createElement('span');
-                    wordElement.textContent = word.text + ' ';
-                    wordElement.classList.add('word');
-                    wordElement.dataset.start = word.start;
-                    wordElement.dataset.end = word.end;
-                    wordContainer.appendChild(wordElement);
-
-                    wordElement.addEventListener('click', function (event) {
-                        if (event.ctrlKey) {
-                            const clickedWord = event.target;
-                            const startPrev = index > 0 ? parseFloat(words[index - 0].start) : parseFloat(word.start);
-                            const endNext = parseFloat(clickedWord.dataset.end);
-
-                            playVisualAudio(startPrev, endNext, false);
-
-                            // Aktualisieren des Play/Pause-Buttons
-                            updatePlayPauseButton();
-
-                            console.log('Start-Play:', clickedWord.textContent, 'Start:', startPrev, 'End:', endNext);
-                        } else {
-                            const startPrev = index > 0 ? Math.max(0, parseFloat(words[index - 0].start) - 0.15) : 0;
-                            const endNext = index < words.length - 1 ? Math.min(parseFloat(words[index + 0].end) + 0.05, parseFloat(words[words.length - 1].end)) : parseFloat(words[words.length - 1].end);
-
-                            playVisualAudio(startPrev, endNext, true);
-
-                            if (!event.ctrlKey) {
-                                event.currentTarget.dataset.start = startPrev;
-                                event.currentTarget.dataset.end = endNext;
-                            }
-
-                            // Aktualisieren des Play/Pause-Buttons, um sicherzustellen, dass die Anzeige synchron bleibt
-                            updatePlayPauseButton();
-
-                            console.log('Word:', event.currentTarget.textContent, 'Start:', startPrev, 'End:', endNext);
-                        }
-                    });
-
-                    transcriptionElement.appendChild(wordContainer);
-                });
-
-                transcriptionContainer.appendChild(transcriptionElement);
-            });
-        })
-        .catch(error => console.error('Fehler beim Laden der Transkription:', error));
-}
-
-
-        
-
-          // WORTMARKIERUNG
-          // WORTMARKIERUNG
-          // WORTMARKIERUNG
-
-          // Event-Listener für den visuellen Audioplayer
-        visualAudioPlayer.addEventListener('play', function () {
-          isPlaying = true;
-          updateWordsHighlight(); // Um das aktuelle Wort sofort zu markieren
-        });
-
-        visualAudioPlayer.addEventListener('pause', function () {
-          isPlaying = false;
-        });
-
-        visualAudioPlayer.addEventListener('timeupdate', function () {
-          updateWordsHighlight();
-        });
-
-        visualAudioPlayer.addEventListener('ended', function () {
-          // Hier deine Logik für das Ende des visualAudioPlayers
-        });
-
-        // Laden Sie das Audio in den visuellen Audioplayer
-        visualAudioPlayer.src = audioFile;
-
-        // Optional: Füge ein Event-Listener für das Ende des audioPlayers hinzu
-        visualAudioPlayer.addEventListener('ended', function () {
-          // Hier deine Logik für das Ende des audioPlayers
-        });
-
-        function updateWordsHighlight() {
-          if (!isPlaying) return;
-        
-          const currentTime = visualAudioPlayer.currentTime;
-        
-          const words = document.querySelectorAll('.word');
-          words.forEach(word => {
-            const start = parseFloat(word.dataset.start);
-            const end = parseFloat(word.dataset.end);
-        
-            // Überprüfen, ob die aktuelle Zeit zwischen dem Start- und Endzeitpunkt des Worts liegt
-            if (currentTime >= start && currentTime <= end) {
-              // Markiere das aktuelle Wort
-              word.classList.add('playing');
-        
-              // Überprüfen, ob das Wort nicht im Sichtbereich ist
-              if (!isElementInViewport(word)) {
-                // Scrollen Sie zum aktuellen Wort, um sicherzustellen, dass es sichtbar ist
-                word.scrollIntoView({ behavior: 'smooth', block: 'center' });
-              }
-            } else {
-              // Entferne die Klasse, wenn die aktuelle Zeit nicht im Bereich des Worts liegt
-              word.classList.remove('playing');
-            }
-          });
-        }
-        
-        
-        // Überprüfen, ob ein Element im Sichtbereich ist
-        function isElementInViewport(element) {
-          const rect = element.getBoundingClientRect();
-          return (
-            rect.top >= 0 &&
-            rect.left >= 0 &&
-            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-          );
-        }
-
-        
-          function formatNumber(number) {
-            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-          }
-
-          function formatTime(timeInSeconds) {
-            const hours = Math.floor(timeInSeconds / 3600);
-            const minutes = Math.floor((timeInSeconds % 3600) / 60);
-            const seconds = Math.round(timeInSeconds % 60);
-            return `${hours < 10 ? '0' : ''}${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-          }
-        });
-
-        document.addEventListener("DOMContentLoaded", function () {
-          const scrollToTopBtn = document.getElementById("scrollToTopBtn");
-
-          // Show the button when the user scrolls down 20px from the top of the document
-          window.addEventListener("scroll", function () {
-              if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-                  scrollToTopBtn.style.display = "block";
-              } else {
-                  scrollToTopBtn.style.display = "none";
-              }
-          });
-
-          // Scroll to the top when the button is clicked
-          scrollToTopBtn.addEventListener("click", function () {
-              document.body.scrollTop = 0;
-              document.documentElement.scrollTop = 0;
-          });
-        });
-
-
-// INFO TEXT
-// INFO TEXT
-// INFO TEXT
-
-
-
-
-
-// MARCAR LETRAS
-// MARCAR LETRAS
-// MARCAR LETRAS
-
-// Objekt zur Speicherung der Anzahl der Übereinstimmungen für jede Suchanfrage
-let matchCounts = {};
-
-// Funktion zum Markieren von Buchstaben
-function markLetters() {
-  console.log("markLetters wird aufgerufen.");
-  const markInput = document.getElementById('markInput');
-  let searchLetters = markInput.value.trim().toLowerCase();
-  let markType = 'exact';
-  let searchQuery = searchLetters;
-  let separatorRegex = /[ ,.?;]/;
-
-  if (searchLetters.endsWith('_')) {
-    markType = 'separator';
-    searchQuery = searchLetters.slice(0, -1);
-    separatorRegex = /\s/;
-  } else if (searchLetters.endsWith('#')) {
-    markType = 'punctuation';
-    searchQuery = searchLetters.slice(0, -1);
-    separatorRegex = /[.,;!?]/;
-  }
-
-  if (searchQuery !== '') {
     const words = document.querySelectorAll('.word');
-    matchCounts[searchLetters] = 0;
+    matchCounts[searchInput] = 0;
 
     words.forEach(word => {
       const wordText = word.textContent.toLowerCase();
-      for (let i = 0; i < wordText.length; i++) {
-        const isExactMatch = wordText.substring(i, i + searchQuery.length) === searchQuery;
-        if (isExactMatch) {
-          const nextChar = wordText[i + searchQuery.length] || ' ';
-          const isValidSeparator = (markType === 'separator') ? separatorRegex.test(nextChar) : true;
-          const isValidPunctuation = (markType === 'punctuation') ? separatorRegex.test(nextChar) : true;
-
-          if (isValidSeparator && isValidPunctuation) {
-            markWordLetters(word, searchLetters, markType);
-            matchCounts[searchLetters]++;
-            break; // Stop checking this word after a match is found
+      if (wordText.includes(searchQuery)) {
+        for (let i = 0; i < wordText.length; i++) {
+          const isExactMatch = wordText.substring(i, i + searchQuery.length) === searchQuery;
+          if (isExactMatch) {
+            const nextChar = wordText[i + searchQuery.length] || ' ';
+            const isValid = (markType === 'separator' || markType === 'punctuation')
+              ? separatorRegex.test(nextChar)
+              : true;
+            if (isValid) {
+              markWordLetters(word, searchInput, markType);
+              matchCounts[searchInput]++;
+              break;
+            }
           }
         }
       }
     });
 
-    if (!document.getElementById(`button-${searchLetters}`)) {
-      createResetButton(searchLetters);
+    if (!document.getElementById(`button-${searchInput}`)) {
+      createResetButton(searchInput);
     }
-
     markInput.value = '';
-    checkResetButtonVisibility(); // Überprüfe die Sichtbarkeit des Zurücksetzen-Buttons
-  }
+    checkResetButtonVisibility();
+  };
 
-}
+  function markWordLetters(word, searchLetters, markType) {
+    let innerHTML = word.innerHTML;
+    let searchQuery = (searchLetters.endsWith('_') || searchLetters.endsWith('#'))
+      ? searchLetters.slice(0, -1)
+      : searchLetters;
+    const separatorRegex = searchLetters.endsWith('_') ? /\s/ : /[.,;!?]/;
+    const isSpecial = searchLetters.endsWith('_') || searchLetters.endsWith('#');
 
-
-// Funktion zum Markieren von Buchstaben in einem Wort
-function markWordLetters(word, searchLetters, markType) {
-  let innerHTML = word.innerHTML;
-  let searchQuery = searchLetters.slice(0, -1); // Entfernt das spezielle Zeichen ('#' oder '_')
-  let separatorRegex = (searchLetters.endsWith('_')) ? /\s/ : /[.,;!?]/;
-  let isSpecialCase = searchLetters.endsWith('_') || searchLetters.endsWith('#');
-
-  // Setze die Suchanfrage auf die volle Eingabe für normale Fälle
-  if (!isSpecialCase) {
-    searchQuery = searchLetters;
-  }
-
-  let i = 0;
-  while (i < innerHTML.length) {
-    let match = new RegExp(`${searchQuery}(?![^<]*>|[^<>]*</)`, 'ig').exec(innerHTML.slice(i));
-
-    if (match) {
-      const matchStart = i + match.index;
-      const matchEnd = matchStart + match[0].length;
-      const nextChar = innerHTML[matchEnd] || ' ';
-
-      let isValidMarkingPosition = isSpecialCase ? separatorRegex.test(nextChar) : true;
-
-      if (isValidMarkingPosition) {
-        const highlightSpan = `<span class="highlight">${match[0]}</span>`;
-        innerHTML = innerHTML.slice(0, matchStart) + highlightSpan + innerHTML.slice(matchEnd);
-        i = matchStart + highlightSpan.length;
+    let i = 0;
+    while (i < innerHTML.length) {
+      const regex = new RegExp(`${searchQuery}(?![^<]*>|[^<>]*</)`, 'ig');
+      const match = regex.exec(innerHTML.slice(i));
+      if (match) {
+        const matchStart = i + match.index;
+        const matchEnd = matchStart + match[0].length;
+        const nextChar = innerHTML[matchEnd] || ' ';
+        const isValid = isSpecial ? separatorRegex.test(nextChar) : true;
+        if (isValid) {
+          const highlightSpan = `<span class="highlight">${match[0]}</span>`;
+          innerHTML = innerHTML.slice(0, matchStart) + highlightSpan + innerHTML.slice(matchEnd);
+          i = matchStart + highlightSpan.length;
+        } else {
+          i = matchEnd;
+        }
       } else {
-        i = matchEnd;
+        break;
       }
-    } else {
-      break; // Kein weiteres Vorkommen gefunden, Schleife beenden
     }
+    word.innerHTML = innerHTML;
   }
 
-  word.innerHTML = innerHTML;
-}
+  function createResetButton(searchLetters) {
+    const resetBtn = document.createElement('button');
+    resetBtn.id = `button-${searchLetters}`;
+    resetBtn.classList.add('letra');
+    resetBtn.innerHTML = `${searchLetters} <span class="result-count">(${matchCounts[searchLetters] || 0})</span>`;
+    resetBtn.addEventListener('click', () => {
+      resetMarkingByLetters(searchLetters);
+      resetBtn.remove();
+      checkResetButtonVisibility();
+    });
+    buttonsContainer.appendChild(resetBtn);
+    checkResetButtonVisibility();
+  }
 
+  window.resetMarkings = function() {
+    const words = document.querySelectorAll('.word');
+    words.forEach(word => {
+      word.innerHTML = word.textContent;
+    });
+    resetAllButtons();
+    checkResetButtonVisibility();
+  };
 
-// Hilfsfunktion zum Verarbeiten eines Textsegments
-function processTextSegment(segment, searchQuery, markType, separatorRegex) {
-  let result = '';
-  let i = 0;
+  function resetAllButtons() {
+    while (buttonsContainer.firstChild) {
+      buttonsContainer.removeChild(buttonsContainer.firstChild);
+    }
+    matchCounts = {};
+  }
 
-  while (i < segment.length) {
-    const isExactMatch = segment.substring(i, i + searchQuery.length).toLowerCase() === searchQuery;
-    if (isExactMatch) {
-      const nextChar = segment[i + searchQuery.length] || ' ';
-      const isValidSeparator = (markType === 'separator') ? separatorRegex.test(nextChar) : true;
-      if (isValidSeparator) {
-        result += `<span class="highlight">${segment.substring(i, i + searchQuery.length)}</span>`;
-        i += searchQuery.length;
+  function resetMarkingByLetters(searchLetters) {
+    const words = document.querySelectorAll('.word');
+    words.forEach(word => {
+      resetWordMarkingsByLetters(word, searchLetters);
+    });
+    checkResetButtonVisibility();
+  }
+
+  function resetWordMarkingsByLetters(word, searchLetters) {
+    let searchQuery = searchLetters.toLowerCase();
+    let markType = 'exact';
+
+    if (searchQuery.endsWith('_')) {
+      searchQuery = searchQuery.slice(0, -1);
+      markType = 'separator';
+    } else if (searchQuery.endsWith('#')) {
+      searchQuery = searchQuery.slice(0, -1);
+      markType = 'punctuation';
+    }
+
+    let wordHTML = word.innerHTML;
+    let newContent = '';
+    let currentIndex = 0;
+
+    while (currentIndex < wordHTML.length) {
+      const spanStart = wordHTML.indexOf('<span class="highlight">', currentIndex);
+      if (spanStart === -1) {
+        newContent += wordHTML.substring(currentIndex);
+        break;
       } else {
-        result += segment[i];
-        i++;
+        newContent += wordHTML.substring(currentIndex, spanStart);
       }
-    } else {
-      result += segment[i];
-      i++;
+      const spanEnd = wordHTML.indexOf('</span>', spanStart);
+      const highlightedTextStart = spanStart + '<span class="highlight">'.length;
+      const highlightedText = wordHTML.substring(highlightedTextStart, spanEnd);
+      let shouldRemove = (highlightedText.toLowerCase() === searchQuery);
+      if (markType !== 'exact') {
+        const nextChar = wordHTML.substring(spanEnd + '</span>'.length, spanEnd + '</span>'.length + 1);
+        const valid =
+          (markType === 'separator' && /\s/.test(nextChar)) ||
+          (markType === 'punctuation' && /[.,;!?]/.test(nextChar));
+        shouldRemove = shouldRemove && valid;
+      }
+      if (shouldRemove) {
+        newContent += highlightedText;
+      } else {
+        newContent += `<span class="highlight">${highlightedText}</span>`;
+      }
+      currentIndex = spanEnd + '</span>'.length;
     }
+    word.innerHTML = newContent;
   }
 
-  return result;
-}
-
-// Funktion, um einen Button für die aktuelle Eingabe zu erstellen
-function createResetButton(searchLetters) {
-  const resetButton = document.createElement('button');
-  resetButton.id = `button-${searchLetters}`;
-  resetButton.classList.add('letra');
-  resetButton.innerHTML = `${searchLetters} <span class="result-count">(${matchCounts[searchLetters] || 0})</span>`;
-
-  resetButton.addEventListener('click', function() {
-    resetMarkingByLetters(searchLetters);
-    resetButton.remove();
-    checkResetButtonVisibility(); // Überprüfe die Sichtbarkeit des Zurücksetzen-Buttons
-  });
-
-  const buttonsContainer = document.getElementById('buttonsContainer');
-  buttonsContainer.appendChild(resetButton);
-
-  checkResetButtonVisibility(); // Überprüfe die Sichtbarkeit des Zurücksetzen-Buttons
-}
-
-// Funktion zum Zurücksetzen aller Markierungen
-function resetMarkings() {
-  console.log("Reset der Markierungen");
-  const words = document.querySelectorAll('.transcription-list .word, .transcription-text .word, .word');
-
-  words.forEach(word => {
-    resetWordMarkings(word); // Entfernt alle Markierungen im Wort
-  });
-
-  resetAllButtons(); // Entfernt alle Buttons und setzt den Zustand zurück
-  checkResetButtonVisibility(); // Überprüfe die Sichtbarkeit des Zurücksetzen-Buttons
-}
-
-
-// Funktion zum Entfernen aller Buttons im Container und Zurücksetzen des Zustands
-function resetAllButtons() {
-  const buttonsContainer = document.getElementById('buttonsContainer');
-  while (buttonsContainer.firstChild) {
-    buttonsContainer.removeChild(buttonsContainer.firstChild);
-  }
-  matchCounts = {}; // Setzt die Übereinstimmungszähler für jede Suchanfrage zurück
-}
-
-// Funktion zum Zurücksetzen der Markierungen in einem Wort
-function resetWordMarkings(word) {
-  // Setze das Wort auf seinen ursprünglichen Textinhalt zurück, ohne einzelne <span>-Elemente
-  word.innerHTML = word.textContent;
-}
-
-// Funktion zum Zurücksetzen der Markierungen nach Buchstaben
-function resetMarkingByLetters(searchLetters) {
-  const words = document.querySelectorAll('.word');
-
-  words.forEach(word => {
-    resetWordMarkingsByLetters(word, searchLetters);
-  });
-
-  checkResetButtonVisibility(); // Überprüfe die Sichtbarkeit des Zurücksetzen-Buttons
-}
-
-// Funktion zum Zurücksetzen der Markierungen nach Buchstaben in einem Wort
-function resetWordMarkingsByLetters(word, searchLetters) {
-  let searchQuery = searchLetters.toLowerCase();
-  let markType = 'exact';
-
-  // Anpassung der Suche basierend auf der Eingabe
-  if (searchQuery.endsWith('_')) {
-    searchQuery = searchQuery.slice(0, -1);
-    markType = 'separator';
-  } else if (searchQuery.endsWith('#')) {
-    searchQuery = searchQuery.slice(0, -1);
-    markType = 'punctuation';
-  }
-
-  let wordHTML = word.innerHTML;
-  let newContent = '';
-  let currentIndex = 0;
-
-  while (currentIndex < wordHTML.length) {
-    const spanStartIndex = wordHTML.indexOf('<span class="highlight">', currentIndex);
-    const spanEndIndex = spanStartIndex >= 0 ? wordHTML.indexOf('</span>', spanStartIndex) : -1;
-
-    // Füge den Text vor dem nächsten <span>-Element hinzu
-    if (spanStartIndex === -1) {
-      newContent += wordHTML.substring(currentIndex);
-      break;
-    } else {
-      newContent += wordHTML.substring(currentIndex, spanStartIndex);
-    }
-
-    // Bestimme den markierten Text im <span>-Element
-    const highlightedTextStartIndex = spanStartIndex + '<span class="highlight">'.length;
-    const highlightedText = wordHTML.substring(highlightedTextStartIndex, spanEndIndex);
-
-    // Überprüfe, ob der markierte Text mit der Suchanfrage übereinstimmt
-    let shouldRemoveHighlight = highlightedText.toLowerCase() === searchQuery;
-    if (markType !== 'exact') {
-      const nextChar = wordHTML.substring(spanEndIndex + '</span>'.length, spanEndIndex + '</span>'.length + 1);
-      const isValidSeparator = markType === 'separator' && /\s/.test(nextChar);
-      const isValidPunctuation = markType === 'punctuation' && /[.,;!?]/.test(nextChar);
-      shouldRemoveHighlight = shouldRemoveHighlight && (isValidSeparator || isValidPunctuation);
-    }
-
-    // Entscheide, ob die Markierung entfernt werden soll
-    if (shouldRemoveHighlight) {
-      newContent += highlightedText;
-    } else {
-      newContent += `<span class="highlight">${highlightedText}</span>`;
-    }
-
-    currentIndex = spanEndIndex + '</span>'.length;
-  }
-
-  word.innerHTML = newContent;
-}
-
-// Funktion, um die Sichtbarkeit des Zurücksetzen-Buttons zu überprüfen und zu steuern
-function checkResetButtonVisibility() {
-  const buttonsContainer = document.getElementById('buttonsContainer');
-  const individualResetButtons = buttonsContainer.querySelectorAll('.letra'); 
-  const resetAllButton = document.getElementById('resetMarkingsButton'); // Verwendet die korrekte ID 'resetMarkingsButton'
-
-  // Wenn es keine individuellen Reset-Buttons gibt, den "Borrar todo"-Button ausblenden
-  if (individualResetButtons.length === 0) {
-    if (resetAllButton) {
+  function checkResetButtonVisibility() {
+    const individualBtns = buttonsContainer.querySelectorAll('.letra');
+    if (individualBtns.length === 0) {
       resetAllButton.style.display = 'none';
-    }
-  } else {
-    // Andernfalls den "Borrar todo"-Button anzeigen
-    if (resetAllButton) {
+    } else {
       resetAllButton.style.display = 'block';
     }
   }
-}
 
-
-
-// Funktion, um den "Borrar todo" Button auszublenden
-function hideResetMarkingsButton() {
-  const resetAllButton = document.getElementById('resetAllButton');
-  if (resetAllButton) {
-    resetAllButton.remove();
+  // ---------------------------------------------------
+  // 7) Scroll-to-top-Button
+  // ---------------------------------------------------
+  if (scrollToTopBtn) {
+    window.addEventListener('scroll', function() {
+      if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+        scrollToTopBtn.style.display = "block";
+      } else {
+        scrollToTopBtn.style.display = "none";
+      }
+    });
+    scrollToTopBtn.addEventListener('click', function() {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    });
   }
-}
 
-// Fügt das aktuelle Jahr in ein Element mit der ID "currentYear" ein
-document.addEventListener("DOMContentLoaded", function() {
-  const year = new Date().getFullYear();
-  document.getElementById("currentYear").textContent = year;
+  // ---------------------------------------------------
+  // 8) Starte das Laden der Transkription
+  // ---------------------------------------------------
+  if (transcriptionFile) {
+    loadTranscription(transcriptionFile);
+  }
 });
-
-
-
-
-
-

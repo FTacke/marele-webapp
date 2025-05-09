@@ -1,11 +1,21 @@
+/* ============================ */
+/* Basic Layout
+/* ============================ */
+
 body {
-  font-family: Arial Narrow, sans-serif;
+  font-family: Arial Narrow, Arial Narrow, Arial, sans-serif, Arial Narrow, Arial, sans-serif;
   min-height: 100vh;
-  margin: 0;
   padding: 0;
-  max-width: 70%;
+  padding-bottom: 60px;
+  width: clamp(300px, 95%, 1400px); /* Mindest-, Ideal- und Maximalwert */
   margin: 0 auto;
   background-color: #f1ded3;
+}
+
+@media only screen and (max-width: 768px) {
+  body {
+    font-size: 0.8em;
+  }
 }
 
 header {
@@ -13,6 +23,109 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 10px;
+  padding: 0px;
+  width: auto;
+}
+
+@media only screen and (max-width: 768px) {
+  header {
+    display: block;
+    text-align: center;
+  }
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0px;
+}
+
+.back-link, .back-link-txt, .back-link-csv, .back-link-xlsx {
+  font-family: Arial Narrow, Arial Narrow, Arial, sans-serif;
+  color: #414141;
+  background-color: #f1ded3;
+  border-radius: 3px;
+  padding: 2px 4px 2px;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
+  font-size: 1.2em;
+  text-decoration: none;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.back-link:hover, .back-link-txt:hover, .back-link-csv:hover, .back-link-xlsx:hover {
+  color: #303030;
+  background-color: #eda38a; 
+}
+
+
+#logoContainer img {
+  margin-top: 25px;
+  width: 225px; /* gewünschte Breite */
+  height: auto; /* Höhe passt sich proportional an */
+}
+
+@media only screen and (max-width: 768px) {
+  #logoContainer img {
+    margin-top: 5px;
+    width: 175px; /* gewünschte Breite */
+    height: auto; /* Höhe passt sich proportional an */
+  }
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(300px, 95%, 1400px);
+  border-top: 1px solid #053c96;
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+  font-size: 0.8em;
+  flex-direction: row;
+  align-items: center;
+  z-index: 1000;
+  background-color: #f1ded3;
+}
+
+.footer div.stats-container {
+  display: inline; /* Display in a single line */
+}
+
+.footer a,
+.footer a:visited {
+  color: #000;
+  text-decoration: none;
+}
+
+@media only screen and (max-width: 768px) {
+  .footer {
+    position: static !important;  /* Kein fixed, sondern normaler Flow */
+    bottom: auto !important;      /* Keine feste Platzierung am unteren Rand */
+    left: auto !important;
+    transform: none !important;
+    width: auto;                  /* Breite ggf. anpassen */
+    text-align: center;           /* Inhalt zentrieren */
+    display: flex;
+    justify-content: center;      /* Zentriert den Flexinhalt horizontal */
+    align-items: center;          /* Zentriert den Inhalt vertikal */
+    padding: 5px;
+    margin-top: 50px;
+  }
+  
+  /* Blende .footer-right komplett aus */
+  .footer-right {
+    display: none !important;
+  }
 }
 
 .p {
@@ -20,15 +133,35 @@ header {
 }
 
 p {
-  display: block;
+  font-family: Arial Narrow, Arial Narrow, Arial, sans-serif, Arial Narrow, Arial, sans-serif;
   margin-block-start: 0.5em;
   margin-block-end: 0.5em;
-  margin-inline-start: 0px;
-  margin-inline-end: 0px;
+}
+
+.narrow {
+  font-family: Arial Narrow, Arial Narrow, Arial, sans-serif, Arial Narrow, Arial, sans-serif;
+  margin-block-start: 0.0em;
+  margin-block-end: 0.0em;
+}
+
+.footnote {
+  color: #393939;
+  font-size: 0.9em;
+}
+
+.footnoteMarker {
+  color: #0049c8;
+  font-weight: bold;
+  font-size: 1.0em;
 }
 
 .text {
   margin-bottom: 10px;
+}
+
+.text-bold-blue {
+  font-weight: bold;
+  color: #053c96;
 }
 
 .text-bold {
@@ -43,12 +176,6 @@ p {
   margin-bottom: 0px;
 }
 
-.td-category {
-  text-align: right; /* Richtet den Text innerhalb der Zelle rechtsbündig aus */
-  width: 60px;
-  vertical-align: top;
-}
-
 .td-todos {
   width: 40px;
 }
@@ -58,12 +185,16 @@ td.empty-cell {
   border-left: 10px solid transparent; /* Erstellt eine transparente Grenze von 20px */
 }
 
+#scaled-content {
+  transform: scale(0.75);
+  transform-origin: top left;
+  width: 125%; /* Kompensation für die Skalierung */
+}
+
 /* NAVIGATION */
 
 #mainNavigation {
-  display: flex;
-  align-items: flex-end; /* Align items to the end (bottom) */
-  margin-top: 100px; /* Add this to push it to the left */
+  margin-top: 124px; /* Add this to push it to the left */
   margin-right: auto; /* Add this to push it to the left */
 }
 
@@ -75,14 +206,14 @@ td.empty-cell {
 }
 
 #mainNavigation li {
-  margin-left: 25px;
+  margin-left: 10px;
 }
 
 #mainNavigation a {
   text-transform: none;
   font-weight: normal;
   font-size: 1.1em;
-  font-family: "Arial Narrow";
+  font-family: Arial Narrow, Arial Narrow, Arial, sans-serif;
   color: #414141;
   background: #e7ae9b;
   border-radius: 3px;
@@ -94,7 +225,7 @@ td.empty-cell {
 
 #mainNavigation a:hover {
   background-color: #eda38a; 
-  color: #303030; /* Blau des Logos */
+  color: #303030;
   border-radius: 3px;
   box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
 }
@@ -109,7 +240,7 @@ td.empty-cell {
 
 #Button a {
   border: 1px solid #303030;
-  font-family: Arial Narrow, sans-serif;
+  font-family: Arial Narrow, Arial Narrow, Arial, sans-serif, Arial Narrow, Arial, sans-serif;
   text-transform: uppercase;
   font-weight: bold;
   font-size: 16px; /* Set your desired font size */
@@ -140,25 +271,34 @@ navd a {
 }
 
 #scrollToTopBtn {
-  font-family: Arial, sans-serif;
+  font-family: Arial Narrow, Arial, sans-serif;
   text-transform: uppercase;
   font-weight: bolder;
-  font-size: 2em; /* Set your desired font size */
-  color: #303030; /* Blau des Logos */
-
+  font-size: 2em;
+  color: #303030;
   text-decoration: none;
   position: fixed;
-  right: 41.75%; /* mittig wäre 41.75% */
+  left: 78%;
+  top: 75%;
   cursor: pointer;
   display: none;
-  top: 20%;
   transform: translateY(0%);
   width: 50px;
   height: 50px;
   background-color: #eda38a82;
   border-radius: 50%;
   box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
+  z-index: 9999;
 }
+
+@media (min-width: 1400px) {
+  /* 78% von 1400px sind 1092px; der Container ist zentriert, also:
+     linker Rand = (Viewport-Breite - 1400px) / 2 */
+  #scrollToTopBtn {
+    left: calc((100% - 1400px) / 2 + 1092px);
+  }
+}
+
 
 #scrollToTopBtn i {
   position: absolute;
@@ -172,30 +312,30 @@ navd a {
 
 #content-container {
   padding-top: 20px;
-  padding-left: 50px;
+  padding-left: 0px;
   flex: 1; /* Allow the content container to grow and fill available space */
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-  line-height: 1.5; /* Verwende einen Multiplikator basierend auf der Schriftgröße (relative Einheit) */
+  font-size: 1.0em;
+  line-height: 1.5; 
   margin-bottom: 50px;
 }
 
 /* Heading styles */
 h1 {
-  font-family: Arial, sans-serif;
+  font-family: Arial Narrow, Arial Narrow, Arial, sans-serif, Arial Narrow, Arial, sans-serif;
   color: #303030; /* Blau des Logos */
   font-size: 1.2em;
 }
 
 h2 {
+  font-family: Arial Narrow, Arial Narrow, Arial, sans-serif, Arial Narrow, Arial, sans-serif;
   color: #303030; /* Blau des Logos */
   font-size: 1.0em;
-  margin-bottom: 0.4em;
+  margin-bottom: 0.6em;
 }
 
 h3 {
-  font-family: Arial Narrow, sans-serif;
-  font-style: italic;
+  font-family: Arial Narrow, Arial Narrow, Arial, sans-serif, Arial Narrow, Arial, sans-serif;
+  font-style:normal;
   font-size: 1.0em;
   margin-left: 0em;
   margin-bottom: 0.3em;
@@ -204,12 +344,29 @@ h3 {
 }
 
 h4 {
-  font-family: Arial Narrow, sans-serif;
+  font-family: Arial Narrow, Arial Narrow, Arial, sans-serif, Arial Narrow, Arial, sans-serif;
   font-style: italic;
   font-size: 1.0em;
   margin-bottom: 0.3em;
   margin-block-start: 0em;
   margin-block-end: 0em;
+}
+
+h5 {
+  font-family: Arial Narrow, Arial Narrow, Arial, sans-serif, Arial Narrow, Arial, sans-serif;
+  color: #303030;
+  font-size: 1.0em;
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+}
+
+h6 {
+  font-family: Arial Narrow, Arial Narrow, Arial, sans-serif, Arial Narrow, Arial, sans-serif;
+  color: #303030;
+  font-size: 1.0em;
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+  display: none;
 }
 
 #main {
@@ -278,40 +435,6 @@ h4 {
 
 
 
-/* FOOTER */
-
-.footer {
-  margin-top: 50px;
-  position: fixed;
-  bottom: 0px;
-  width: 70%;
-  border-top: 1px solid #303030;
-  text-align: center;
-  display: flex;
-  justify-content: space-between;
-  padding: 5px;
-  font-size: 12px;
-  flex-direction: row;
-  align-items: center; /* Vertikal zentrieren */
-  z-index: 1000; /* Oder einen anderen Wert, je nach Bedarf */
-  background-color: #f1ded3;
-}
-
-
-.footer div {
-  margin: 0px 0; /* Adjust vertical spacing as needed */
-}
-
-.footer div.stats-container {
-  display: inline; /* Display in a single line */
-}
-
-.footer a,
-.footer a:visited {
-  color: #000;
-  text-decoration: none;
-}
-
 
 
 /* STATISTIKEN */
@@ -320,7 +443,7 @@ h4 {
   border-collapse: collapse;
   margin-top: 5px;
   margin-bottom: 20px;
-  font-family: Arial, sans-serif;
+  font-family: Arial Narrow, Arial, sans-serif;
   font-size: 0.8em;
   line-height: 1em;
 }
@@ -355,68 +478,109 @@ h4 {
 
 /* ÜBERSICHT AUDIOS-TRANSKRIPTIONEN INKL. METADATEN */
 
-#audiofile-table {
+#informantes-table {
   border-collapse: collapse;
-  margin-top: 5px;
-  margin-bottom: 20px;
-  font-family: Arial, sans-serif;
+  font-family: Arial Narrow, Arial, sans-serif;
   font-size: 0.8em;
+  line-height: 1.0em;
+  margin-bottom: 20px;
 }
 
-#audiofile-table .right-align {
+#informantes-table .right-align {
   text-align: right;
 }
 
-#audiofile-table th, #audiofile-table td {
+#informantes-table th, #informantes-table td {
   border: 2px solid rgba(0,0,0,.06);
   padding: 4px;
   text-align: left;
   max-width: 45ch; /* Maximale Breite für 45 Zeichen */
 }
 
-#audiofile-table th { 
+#informantes-table th { 
   background-color: #484f5a1c;
 }
 
-#audiofile-table tbody tr:nth-child(even) {
+#informantes-table tbody tr:nth-child(even) {
   background-color: #dddfe246;
 }
 
-#audiofile-table tbody tr:hover {
+#informantes-table tbody tr:hover {
   background-color: #efede173;
 }
 
 /* Mouseover-Effekt für sortierbare Spaltenüberschriften */
-#audiofile-table th {
+#informantes-table th {
   cursor: pointer; /* Zeigt die Hand an, wenn die Maus über die Spaltenüberschrift fährt */
   transition: background-color 0.1s, color 0.1s; /* Weicher Übergang */
 }
 
-#audiofile-table th:hover {
+#informantes-table th:hover {
   background-color: #f0f0f0; /* Helle Hintergrundfarbe beim Hover */
   color: #333; /* Dunklere Schriftfarbe beim Hover */
 }
 
 
+#nativos-table {
+  border-collapse: collapse;
+  font-family: Arial Narrow, Arial, sans-serif;
+  font-size: 0.8em;
+  line-height: 1.0em;
+}
+
+#nativos-table .right-align {
+  text-align: right;
+}
+
+#nativos-table th, #nativos-table td {
+  border: 2px solid rgba(0,0,0,.06);
+  padding: 4px;
+  text-align: left;
+  max-width: 45ch; /* Maximale Breite für 45 Zeichen */
+}
+
+#nativos-table th { 
+  background-color: #484f5a1c;
+}
+
+#nativos-table tbody tr:nth-child(even) {
+  background-color: #dddfe246;
+}
+
+#nativos-table tbody tr:hover {
+  background-color: #efede173;
+}
+
+/* Mouseover-Effekt für sortierbare Spaltenüberschriften */
+#nativos-table th {
+  cursor: pointer; /* Zeigt die Hand an, wenn die Maus über die Spaltenüberschrift fährt */
+  transition: background-color 0.1s, color 0.1s; /* Weicher Übergang */
+}
+
+#nativos-table th:hover {
+  background-color: #f0f0f0; /* Helle Hintergrundfarbe beim Hover */
+  color: #333; /* Dunklere Schriftfarbe beim Hover */
+}
 
 #analysisTable {
-
   border-collapse: collapse;
   margin-top: 5px;
   margin-bottom: 20px;
-  font-family: Arial, sans-serif;
+  font-family: "Arial Narrow", "Arial", Arial, sans-serif;
   font-size: 0.8em;
   line-height: 1em;
 }
 
-#analysisTable .right-align {
-  text-align: right;
-}
-
-#analysisTable th, #analysisTable td {
+/* Standard-Zellenstile */
+#analysisTable th,
+#analysisTable td {
   border: 2px solid rgba(0,0,0,.06);
   padding: 8px;
   text-align: left;
+}
+
+#analysisTable .right-align {
+  text-align: right;
 }
 
 #analysisTable th { 
@@ -439,16 +603,56 @@ h4 {
   border-radius: 4px;
   background-color: #f9f9f9;
   color: #333;
+  max-width: 150px;
+  width: auto;
+  box-sizing: border-box;
 }
 
+@media only screen and (max-width: 768px) {
+  #analysisTable td select {
+    font-size: 0.8em;        /* etwas kleinere Schrift */
+    padding: 2px 4px;        /* reduziert das Padding */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    color: #333;
+    width: 20ch;             /* Breite auf 20 Zeichen festgelegt */
+    max-width: 20ch;         /* maximale Breite ebenfalls 20 Zeichen */
+    box-sizing: border-box;  /* berücksichtigt Padding und Border */
+    overflow: hidden;        /* versteckt überlaufenden Inhalt */
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    flex: 0 0 auto;          /* verhindert, dass der Flex-Container das Element erweitert */
+    min-width: 0;            /* erlaubt das Verkleinern in Flex-Umgebung */
+  }
+}
 
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media only screen and (max-width: 768px) {
+  #analysisTable {
+    min-width: 100%;
+  }
+  
+  #analysisTable th,
+  #analysisTable td {
+    padding: 2px;
+  }
+}
+
+.highlight-L1-ES {
+  background-color: rgba(198, 41, 41, 0.369) !important;
+}
 
 
 /* NAVIGATION ZU AUDIOS & DOKUMENTE */
 
 /* Stil für nav-Container */
 .nav-container {
-  font-family: "Arial Narrow";
+  font-family: "Arial Narrow", "Arial";
   padding: 0px;
   margin: 0;
   border-radius: 8px;
@@ -491,19 +695,66 @@ nav a:hover {
   background-color: hsl(208, 27%, 60%);
 }
 
-
-
-
-
 /* PLAYER */
 /* PLAYER */
 /* PLAYER */
 
 /* ANORDNUNG DER METADATEN, TRANSKRIPTION, etc. */
 
+.speaker-turn {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.speaker-name {
+  flex: 0 0 75px;
+  font-weight: bold;
+  color: #053c96;
+  margin-right: 1rem;
+  text-align: right;
+  cursor: pointer;
+  margin-top: 4px;
+  position: relative;
+}
+
+.speaker-content {
+  flex: 1;
+  font-family: "Consolas, Inconsolata", monospace;
+  margin-bottom: 10px; 
+  text-align: left;
+  line-height: 1.2;
+}
+
+.speaker-time {
+  font-size: 0.8em;
+  font-family: Arial Narrow, Arial Narrow, Arial, sans-serif;
+  color: rgb(91, 91, 91);
+  margin-right: 35px;
+  margin-bottom: 0.3rem;
+  line-height: 0px;
+}
+
+.speaker-text {
+  line-height: 1.4;
+}
+
+/* Stil für den Transkriptionstext */
+.transcription {
+  line-height: 1.3;
+  text-indent: 0px; /* Hier wird der Text eingerückt */
+  margin: 0 auto;
+  margin-bottom: 20px; /* Zum Beispiel 20px Abstand zwischen den einzelnen Redebeiträgen */
+  text-align: justify;
+}
+
+.word {
+  cursor: pointer; /* Mauszeiger als Hand */
+}
+
+
 #player-table {
-  margin-top: 20px;
-  width: 100%;
+  width: auto;
   border-collapse: collapse;
 }
 
@@ -512,39 +763,134 @@ nav a:hover {
 }
 
 #sidebars {
-  position: sticky;
-  top: 280px;
-  width: 15%; /* Breite der Sidebar anpassen */
+  position: fixed;
+  left: 78%;
+  width: auto;
+  z-index: 9990;
 }
 
+@media (min-width: 1400px) {
+  /* 78% von 1400px sind 1092px; der Container ist zentriert, also:
+     linker Rand = (Viewport-Breite - 1400px) / 2 */
+  #sidebars {
+    left: calc((100% - 1400px) / 2 + 1092px);
+  }
+}
 
 #sidebarContainer-meta {
   font-size: 0.9em;
   color: #414141;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  margin-left: 0px !important;
+}
+
+.metadata-value {
+  color: #C20920;
+}
+
+.metadata-value-L2_3Spanisch {
+  color: #C20920;
+  font-weight: bold;
 }
 
 #sidebarContainer {
   font-size: 0.9em;
   color: #414141;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  margin-left: 0px !important;
 }
 
+#sidebarContainer-letters {
+  font-size: 0.9em;
+  color: #414141;
+  margin-bottom: 10px;
+  margin-left: 0px !important;
+}
+
+#sidebarContainer-controls {
+  font-size: 0.9em;
+  color: #414141;
+  margin-bottom: 10px;
+  margin-left: 0px !important;
+  display: none;
+}
+
+#sidebarContainer-export {
+  font-size: 0.9em;
+  color: #414141;
+  margin-bottom: 10px;
+  margin-left: 0px !important;
+  display: none;
+}
 
 #sidebarContainer a {
-  margin-right: 5px; /* Fügt rechts von jedem <a>-Tag einen Abstand von 5px hinzu */
+  margin-right: 5px;
 }
 
 #sidebarContainer a:last-child {
-  margin-right: 0; /* Entfernt den Abstand auf der rechten Seite des letzten <a>-Tags */
+  margin-right: 0;
 }
 
 #transcriptionContainer {
-  font-size: 1.1em;
-  margin-top: 10px;
   margin-bottom: 100px;
-  padding-left: 5%;
+  width: 75%;
 }
+
+/* Für breitere Bildschirme */
+@media screen and (min-width: 1200px) {
+  #transcriptionContainer {
+    width: 80%;
+  }
+}
+
+@media screen and (min-width: 1400px) {
+  #transcriptionContainer {
+    width: 90%;
+  }
+}
+
+/* Für kleine Bildschirme */
+@media only screen and (max-width: 768px) {
+  #transcriptionContainer {
+    width: auto !important;
+    margin-bottom: 20px !important;
+    float: none !important;
+    clear: both !important;
+  }
+  
+  #transcriptionContainer > div {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+
+
+.speaker-label {
+  font-family: Arial Narrow, Arial Narrow, Arial, sans-serif, Arial Narrow, Arial, sans-serif;
+  color: #303030;
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-top: 0.2em;
+  margin-bottom: 1.9em;
+  display: contents;
+}
+
+
+
+.word-container {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 5px; /* z.B. kleiner Abstand zwischen den Zeilen */
+}
+
+.word-number {
+  color: #C20920;
+  font-size: 1.0em;
+  margin-right: 10px;
+  vertical-align: top;
+}
+
 
 #capital-table {
   margin-top: 20px;
@@ -578,6 +924,11 @@ nav a:hover {
 
 
 
+.spanish-level {
+  color: rgb(192, 0, 0);
+  font-weight: bold;
+  text-align: center;
+}
 
 
 
@@ -585,28 +936,7 @@ nav a:hover {
 
 
 /* Stil für den Transkriptionstext */
-.transcription-list {
-  font-family: "Courier New", monospace;
-  line-height: 1.3;
-  text-indent: 0px; /* Hier wird der Text eingerückt */
-  margin: 0 auto;
-  margin-bottom: 20px; /* Zum Beispiel 20px Abstand zwischen den einzelnen Redebeiträgen */
-  cursor: pointer;
-}
 
-.transcription-list .word {
-  display: block; /* Hier wird jedes Wort untereinander angezeigt */
-}
-
-.transcription-text {
-  font-family: "Courier New", monospace;
-  line-height: 1.3;
-  text-indent: 0px; /* Hier wird der Text eingerückt */
-  margin: 0 auto;
-  margin-bottom: 20px; /* Zum Beispiel 20px Abstand zwischen den einzelnen Redebeiträgen */
-  text-align: justify;
-  cursor: pointer;
-}
 
 .word:hover,
 .word.playing:hover {
@@ -619,8 +949,10 @@ nav a:hover {
 
 .speaker-time {
   font-size: 0.8em;
-  font-family: "Arial Narrow";
+  font-family: "Arial Narrow", "Arial";
   color: rgb(91, 91, 91);
+  margin-top: 10px;
+  margin-bottom: 15px;
   margin-right: 35px;
 }
 
@@ -699,7 +1031,7 @@ nav a:hover {
 
 
 .speaker {
-  font-family: "Arial", monospace;
+  font-family: "Arial Narrow", "Arial", monospace;
   font-weight: bold;
   color: #414141;
   cursor: pointer;
@@ -714,7 +1046,7 @@ nav a:hover {
 
 /* Stil für Audio-Container */
 #audioContainer {
-  font-family: "Arial Narrow";
+  font-family: "Arial Narrow", "Arial";
   border: 0px solid #000;
   padding: 5px;
   margin: 0 auto;
@@ -725,15 +1057,20 @@ nav a:hover {
 .custom-audio-player {
   position: fixed;
   bottom: 23px;
-  left: 30.0%;
-  right: auto; /* Entfernt den Einfluss von "right" */
-  width: 600px; /* Feste Breite */
-  z-index: 1000; /* Stellen Sie sicher, dass dies über anderen Elementen liegt */
-  background-color: #daada3be; /* Graue Hintergrundfarbe mit 50% Transparenz */
+  /* Berechnet den linken Rand des Bodys:
+     1. Gesamtbreite des Viewports minus die Breite des Bodys ergibt den "Rest" an Breite.
+     2. Dieser Rest wird halbiert, da der Body zentriert ist.
+  */
+  left: calc((100% - clamp(300px, 95%, 1400px)) / 2);
+  /* 75 % der Breite des Bodys */
+  width: calc(clamp(300px, 95%, 1400px) * 0.74);
+  z-index: 1000;
+  background-color: #daada3be;
   border-radius: 3px;
   padding: 4px 6px 4px 6px;
   box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
 }
+
 
 
 .player-controls {
@@ -806,13 +1143,13 @@ nav a:hover {
 }
 
 #speedDisplay {
-  font-family: "Arial Narrow";
+  font-family: "Arial Narrow", "Arial";
   font-weight: bold;
   color: #414141;
 }
 
 .time-display {
-  font-family: "Arial Narrow";
+  font-family: "Arial Narrow", "Arial";
   font-weight: bold;
   color: #414141;
 }
@@ -887,11 +1224,8 @@ nav a:hover {
 }
 
 .informante {
-  color: #414141;
-  background: #e7ae9b;
-  border-radius: 3px;
-  padding: 2px 16px 2px;
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
+  color: rgb(192, 0, 0);
+  font-weight: normal;
   font-size: 1.1em;
   font-family: Consolas,Menlo,Monaco,"Lucida Console","Liberation Mono","DejaVu Sans Mono","Bitstream Vera Sans Mono","Courier New",monospace;
 }
@@ -903,11 +1237,11 @@ nav a:hover {
   padding: 0px 4px 0px;
   box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
   font-size: 1.0em;
-  font-family: "Arial";
+  font-family: "Arial Narrow", "Arial";
 }
 
 .link, .link-txt, .link-csv, .link-xlsx {
-  font-family: "Arial Narrow";
+  font-family: "Arial Narrow", "Arial";
   color: #414141;
   background: #e7ae9b;
   border-radius: 3px;
@@ -923,10 +1257,27 @@ nav a:hover {
   background-color: #eda38a; 
 }
 
+.link-analysis, .link-analysis-txt, .link-analysis-csv, .link-analysis-xlsx {
+  font-family: "Consolas";
+  color: #414141;
+  background: #e7ae9b;
+  border-radius: 3px;
+  padding: 2px 4px 2px;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
+  font-size: 1.2em;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.link-analysis:hover, .link-analysis-txt:hover, .link-analysis-csv:hover, .link-analysis-xlsx:hover {
+  color: #303030; /* Blau des Logos */
+  background-color: #eda38a; 
+}
+
 
 
 .leer-button {
-  font-family: "Arial Narrow";
+  font-family: "Arial Narrow", "Arial";
   color: #414141;
   background: #a9c9d0;
   border-radius: 3px;
@@ -995,7 +1346,7 @@ nav a:hover {
   width: 200px;
   line-height: 1.3;
   font-size: 12px;
-  font-family: "Arial";
+  font-family: "Arial Narrow", "Arial";
   text-align: left;
   font-weight: 100;
   color: #414141;
@@ -1028,8 +1379,162 @@ nav a:hover {
 }
 
 
+.transcription-list {
+  display: block;              /* Als Block-Element, damit width wirkt */
+  width: 100%;                 /* Nutzt die volle Breite des übergeordneten Containers */
+  text-indent: 0;              /* Kein Einrücken */
+  margin-bottom: 10px;         /* Abstand zwischen den Redebeiträgen */
+  cursor: pointer;
+  font-family: "Consolas, Inconsolata", monospace;
+  text-align: left;
+  line-height: 1.2;
+  
+  /* Multi-Column Layout: 5 Spalten mit 50px Spaltabstand */
+  column-count: 4;
+  column-gap: 50px;
+  
+  /* Verhindert, dass einzelne Elemente zwischen Spalten aufgeteilt werden */
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  -moz-column-break-inside: avoid;
+}
 
 
+.transcription-list .word {
+  display: block; /* Hier wird jedes Wort untereinander angezeigt */
+}
+
+/* Bei mittleren Bildschirmen: zwei Spalten */
+@media (max-width: 1200px) {
+  .transcription-list {
+    column-count: 3;
+  }
+}
+
+/* Bei kleinen Bildschirmen: eine Spalte */
+@media (max-width: 600px) {
+  .transcription-list {
+    column-count: 2;
+  }
+}
+
+
+/* Standard: Drei Spalten für große Bildschirme */
+.transcription-text {
+  width: 100%;
+  /* Nutzt zwei Spalten, wobei der verfügbare Platz gleichmäßig aufgeteilt wird */
+  column-count: 2;
+  column-gap: 20px;
+  
+  /* Abstände und Textformatierung */
+  margin-top: 50px;
+  margin-bottom: 10px;
+  text-indent: 0;
+  cursor: pointer;
+  font-family: "Consolas, Inconsolata", monospace;
+  text-align: left;
+  line-height: 1.5;
+  
+  /* Verhindert, dass einzelne Elemente (z. B. Absatzblöcke) zwischen den Spalten aufgeteilt werden */
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  -moz-column-break-inside: avoid;
+}
+
+
+/* Bei mittleren Bildschirmen: zwei Spalten */
+@media (max-width: 1200px) {
+  .transcription-text {
+    column-count: 2;
+  }
+}
+
+/* Bei kleinen Bildschirmen: eine Spalte */
+@media (max-width: 600px) {
+  .transcription-text {
+    column-count: 1;
+  }
+}
+
+/* ACCESS-FORMULAR */
+
+/* ACCESS-FORMULAR */
+
+.form-wrapper1 {
+  max-width: 400px;
+  box-sizing: border-box;
+}
+
+.form-wrapper2 {
+  box-sizing: border-box;
+  border: 1px solid #4d4d4d;
+  margin-bottom: 20px;
+  border-radius: 3px;
+  padding: 2px 12px;
+  max-width: fit-content;
+}
+
+/* Bestehender Stil für den Bestätigungsbereich */
+#terms {
+  border: 1px solid #4d4d4d;
+  font-size: 0.8em;
+  line-height: 1.0; 
+  margin-bottom: 20px;
+  border-radius: 3px;
+  padding: 2px 4px;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* Beispiel für die Formularfelder */
+.access {
+  color: #414141;
+  background: #e7ae9b;
+  border-radius: 3px;
+  padding: 2px 4px;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+  font-size: 1.0em;
+  font-family: "Arial Narrow", "Arial", "Consolas", Menlo, Monaco, "Lucida Console", "Liberation Mono", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Courier New", monospace;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+}
+
+.error {
+  font-size: 1.0em;
+  color: #a90000;
+  font-family: "Consolas", "Courier New", monospace;
+  margin-bottom: 50px;
+}
+
+.link-error {
+  font-size: 1.0em;
+  font-weight:unset;
+  color: #a90000;
+  font-family: "Consolas", "Courier New", monospace;
+}
+
+.error1 {
+  margin-bottom: 30px;
+  box-sizing: border-box;
+  border: 1px solid #4d4d4d;
+  margin-bottom: 20px;
+  border-radius: 3px;
+  padding: 2px 12px;
+}
+
+.grey {
+  font-size: 1.0em;
+  font-style: italic;
+  color: #636363;
+}
+
+.red {
+  font-size: 1.0em;
+  font-style: bold;
+  color: #ba0000;
+}
 
 
 .entrar_letras {
@@ -1039,7 +1544,7 @@ nav a:hover {
   padding: 2px 4px 2px;
   box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
   font-size: 1.0em;
-  font-family: "Arial","Consolas",Menlo,Monaco,"Lucida Console","Liberation Mono","DejaVu Sans Mono","Bitstream Vera Sans Mono","Courier New",monospace;
+  font-family: "Arial Narrow", "Arial","Consolas",Menlo,Monaco,"Lucida Console","Liberation Mono","DejaVu Sans Mono","Bitstream Vera Sans Mono","Courier New",monospace;
 }
 
 #markInput {
@@ -1090,7 +1595,7 @@ button {
 }
 
 .button {
-  font-family: "Arial Narrow";
+  font-family: "Arial Narrow", "Arial";
   color: #414141;
   background: #e7ae9b;
   border-radius: 3px;
@@ -1103,7 +1608,7 @@ button {
 }
 
 .borrar {
-  font-family: "Arial Narrow";
+  font-family: "Arial Narrow", "Arial";
   color: #414141;
   background: #d0a9a9;
   border-radius: 3px;
@@ -1121,7 +1626,7 @@ button {
 }
 
 .borrar {
-  font-family: "Arial Narrow";
+  font-family: "Arial Narrow", "Arial";
   color: #414141;
   background: #d0a9a9;
   border-radius: 3px;
@@ -1163,7 +1668,7 @@ button {
 /* SEARCH */
 
 .buscar {
-  font-family: "Arial";
+  font-family: "Arial Narrow", "Arial";
   color: #414141;
   background: #a9c9d0;
   border-radius: 0px;
@@ -1180,7 +1685,7 @@ button {
   margin-top: 10px;
   width: 100%;
   border-collapse: collapse;
-  font-family: "Arial Narrow";
+  font-family: "Arial Narrow", "Arial";
   table-layout: auto; /* Ändern Sie die table-layout Eigenschaft */
   border-radius: 3px;
   padding: 5px;
@@ -1194,7 +1699,7 @@ button {
 }
 
 #category {
-  font-family: "Arial Narrow";
+  font-family: "Arial Narrow", "Arial";
   font-weight: bold;
   color: #414141;
   font-size: 1.0em;
@@ -1204,7 +1709,7 @@ button {
 }
 
 #category1 {
-  font-family: "Arial Narrow";
+  font-family: "Arial Narrow", "Arial";
   font-weight: bold;
   color: #414141;
   font-size: 1.0em;
@@ -1339,7 +1844,7 @@ input[type="checkbox" i] {
   border-collapse: collapse;
   margin-top: 5px;
   margin-bottom: 20px;
-  font-family: Arial, sans-serif;
+  font-family: Arial Narrow, Arial, sans-serif;
   font-size: 0.8em;
   line-height: 1em;
 }
@@ -1420,15 +1925,18 @@ input[type="checkbox" i] {
 }
 
 .download-link {
-  font-family: "Arial Narrow";
+  font-family: Arial Narrow, Arial, sans-serif;
   color: #414141;
   background: #e7ae9b;
   border-radius: 3px;
-  padding: 2px 4px 2px;
+  padding: 0px 2px 0px;
   box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
-  font-size: 1.5em;
+  font-size: 1.4em;
   text-decoration: none;
   cursor: pointer;
+  display: inline-block;
+  width: 1.2em;
+  text-align: center;
 }
 
 .download-link:hover {
@@ -1436,3 +1944,296 @@ input[type="checkbox" i] {
   background-color: #efede1; 
 }
 
+
+
+@media only screen and (max-width: 768px) {
+  #content-container {
+    max-width: 100% !important;
+    padding: 10px !important;
+    margin: 0 auto !important;
+  }
+
+  /* Tabelle und deren Zeilen/Zellen als flexibler Block */
+  #player-table {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    border-collapse: collapse;
+  }
+  #player-table tr {
+    display: flex !important;
+    flex-direction: column;
+    width: 100% !important;
+  }
+  #player-table tr td {
+    display: block !important;
+    width: auto !important;
+    padding: 0 !important;
+    box-sizing: border-box;
+  }
+
+  /* Reihung ändern: Die Zelle mit den Sidebars (ID "sidebars") soll oberhalb des Transkriptionscontainers stehen */
+  #player-table tr td#sidebars {
+    order: -1;
+  }
+
+  /* Sidebars: Feste Positionierung entfernen und volle Breite nutzen */
+  #sidebars {
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    width: 100% !important;
+    padding-left: 0 !important;
+    margin-bottom: 10px !important;
+    float: none !important;
+    clear: both !important;
+  }
+
+
+
+/* Navigation: ganze Breite, aber unter dem Logo */
+#mainNavigation {
+  width: 100%;
+  margin: 0 auto;
+}
+/* Navigationsliste als Flex-Container: horizontal zentriert */
+#mainNavigation nav ul {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+/* Einzelne Listenelemente nebeneinander, mit etwas Abstand */
+#mainNavigation nav ul li {
+  display: inline-block;
+  margin: 0 2px;
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0px;
+}
+
+#mainNavigation a {
+  text-transform: none;
+  font-weight: normal;
+  font-size: 1.0em;
+  line-height: 3cap;
+}
+
+h1 {
+  font-family: Arial Narrow, Arial Narrow, Arial, sans-serif, Arial Narrow, Arial, sans-serif;
+  color: #303030;
+  font-size: 1.2em;
+}
+
+/* Stil für Audio-Container */
+#audioContainer {
+  font-family: Arial Narrow, Arial Narrow, Arial, sans-serif;
+  border: 0px solid #000;
+  padding: 5px;
+  margin: 0 auto;
+  margin-top: 20px; /* Abstand nach oben */
+  margin-bottom: 0px; /* Abstand nach unten */
+}
+
+.custom-audio-player {
+  position: fixed;
+  bottom: 10px;
+  /* Berechnet den linken Rand des Bodys:
+     1. Gesamtbreite des Viewports minus die Breite des Bodys ergibt den "Rest" an Breite.
+     2. Dieser Rest wird halbiert, da der Body zentriert ist.
+  */
+  /* 75 % der Breite des Bodys */
+  left: calc((100% - clamp(300px, 95%, 1400px)) / 2);
+  width: 92%; /* 95% der Breite des Bodys */
+  z-index: 1000;
+  background-color: #daada3be;
+  border-radius: 3px;
+  padding: 4px 6px;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
+}
+
+.custom-audio-player .time-display,
+.custom-audio-player #speedDisplay {
+  font-size: 90% !important;
+}
+
+.player-controls {
+  display: flex;
+  flex-direction: column;
+}
+
+.player-controls-top {
+  display: flex;
+  align-items: center; /* Vertikale Zentrierung der Elemente */
+  justify-content: space-between; /* Gleichmäßiger Abstand */
+}
+
+.player-controls-bottom {
+  display: flex;
+  align-items: center; /* Vertikale Zentrierung */
+  justify-content: space-around; /* Gleichmäßiger Abstand */
+  margin-bottom: 10px;
+}
+
+.progress-bar {
+  flex-grow: 1;
+  margin-right: 10px; /* Abstand zwischen Fortschrittsanzeige und Lautstärkeregelung */
+}
+
+.volume-control-container {
+  display: flex;
+  align-items: center;
+  margin-left: 10px; /* Abstand zur Fortschrittsanzeige */
+}
+
+#muteBtn {
+  margin-right: 10px; /* Abstand zwischen Mute-Button und Lautstärkeregler */
+}
+
+.volume-control {
+  width: 80px; /* Breite der Lautstärkeregelung verringert */
+}
+
+.speed-control-container {
+  display: flex;
+  align-items: center;
+}
+
+.speed-control-container > * {
+  margin-right: 10px; /* Abstand von 10px zu jedem Element */
+}
+
+.speed-control-container > *:last-child {
+  margin-right: 0; /* Kein Abstand beim letzten Element */
+}
+
+#speedControlSlider {
+  margin-right: 10px; /* Abstand zwischen Slider und Anzeige */
+  width: 80px; /* Breite des Sliders verringert */
+}
+
+#speedDisplay {
+  font-family: Arial Narrow, Arial Narrow, Arial, sans-serif;
+  font-weight: bold;
+  color: #414141;
+}
+
+.time-display {
+  font-family: Arial Narrow, Arial Narrow, Arial, sans-serif;
+  font-weight: bold;
+  color: #414141;
+}
+
+.playContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0.5;
+}
+
+.playContainer > * {
+  margin-right: 15px; /* Reduzierter Abstand zwischen den Elementen */
+}
+
+.playContainer > *:last-child {
+  margin-right: 0; /* Kein Abstand beim letzten Element */
+}
+
+#capital-table {
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+#capitalLinksContainer {
+  display: none;
+  width: min-content;
+}
+
+#sidebarContainer {
+  display: none;
+  width: min-content;
+}
+
+#audiofile-table {
+  font-family: Arial Narrow, Arial Narrow, Arial, sans-serif, Arial Narrow, Arial, sans-serif;
+  width: auto;
+  border-collapse: collapse;
+  margin-top: 5px;
+  margin-bottom: 20px;
+  font-size: 0.8em;
+  line-height: 1em;
+  table-layout: fixed;
+}
+
+#sidebarContainer-meta {
+  font-size: 1.1em;
+  color: #414141;
+  margin-left: 0px !important;
+}
+
+#sidebarContainer-letters {
+  font-size: 1.1em;
+  color: #414141;
+  margin-left: 0px !important;
+}
+
+#sidebarContainer {
+  font-size: 1.0em;
+  color: #414141;
+  margin-left: 40px !important;
+}
+
+h6 {
+  font-family: Arial Narrow, Arial Narrow, Arial, sans-serif, Arial Narrow, Arial, sans-serif;
+  color: #303030;
+  font-size: 1.0em;
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+  display: none;
+}
+
+#sidebarContainer a {
+  margin-right: 5px;
+}
+
+#sidebarContainer a:last-child {
+  margin-right: 0;
+}
+
+
+
+#scrollToTopBtn {
+  font-family: Arial Narrow, Arial, sans-serif;
+  text-transform: uppercase;
+  font-weight: bolder;
+  font-size: 2em;
+  color: #303030;
+  text-decoration: none;
+  position: fixed;
+  left: calc((100% - clamp(300px, 95%, 1400px)) / 2 + 280px);
+  top: 75%;
+  cursor: pointer;
+  display: none;
+  transform: translateY(0%);
+  width: 50px;
+  height: 50px;
+  background-color: #eda38a82;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
+  z-index: 9999;
+}
+
+.speaker-content {
+  flex: 1;
+  font-family: "Consolas, Inconsolata", monospace;
+  margin-bottom: 5px; 
+  text-align: left;
+}
+
+}

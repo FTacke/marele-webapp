@@ -14,8 +14,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Installiere pyjwt mit cryptography-Unterstützung
+RUN pip install --no-cache-dir "pyjwt[crypto]"
+
 # Kopiere den Rest der Anwendung
 COPY . .
+
+# Kopiere die Schlüsseldateien in das Image
+COPY keys /app/keys
 
 # Exponiere den Port, auf dem Flask läuft
 EXPOSE 5000

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="data:image/x-icon;,">
+  <title>MAR.ELE</title>
+  <link rel="icon" type="image/x-icon" href="static/img/favicon.ico">
+  <link rel="stylesheet" href="static/css/index_styles.css">
+  <script src="static/js/informantes_script.js"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/marele_styles.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    // Erstelle den Player-Link vorab mit Flask url_for
+    const playerPath = '{{ url_for("player") }}';
+  </script>
+</head>
+<body>
+  <header>
+    <div id="logoContainer">
+      <a href="{{ url_for('index') }}"><img src="static\img\logo_marele.jpg" width="225" alt="MARELE"></a>
+    </div>
+    <!-- Navigation -->
+    <div id="mainNavigation">
+      <nav>
+        <ul>
+          <li><a href="{{ url_for('index') }}" class="page-link active"><i class="bi bi-house"></i></a></li>
+          <li><a href="{{ url_for('proyecto') }}" class="page-link">Proyecto</a></li>
+          <li><a href="{{ url_for('informantes') }}" class="page-link"> Informantes</a></li>
+          <li><a href="{{ url_for('analisis') }}" class="page-link">Análisis</a></li>
+          <li class="logout-item">
+            <a href="{{ url_for('logout') }}" class="logout-link">
+              <i class="bi bi-box-arrow-right" alt="Logout"></i>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<!-- PAGE CONTENT HERE (content-container) -->
+<div id="content-container">
+  <h1>Impressum</h1>
+  <p><strong>Anbieter dieser Internetpräsenz im Rechtssinne ist die:</strong></p>
+  <p>Philipps-Universität Marburg<br>
+  Der Präsident<br>
+  Prof. Dr. Thomas Nauss<br>
+  Biegenstraße 10<br>
+  35037 Marburg<br>
+  Tel.: +49 6421 28-20<br>
+  Fax: +49 6421 28-22500<br>
+  Internet: <a href="https://www.uni-marburg.de">https://www.uni-marburg.de</a><br>
+  E-Mail: <a href="mailto:info@uni-marburg.de">info@uni-marburg.de</a></p>
+
+  <p><strong>Umsatzsteuer-Identifikationsnummer:</strong> DE 112590692</p>
+
+  <p><strong>Postanschrift:</strong><br>
+  Philipps-Universität Marburg<br>
+  Postfach<br>
+  35032 Marburg</p>
+
+  <p><strong>Zuständige Aufsichtsbehörde:</strong><br>
+  Hessisches Ministerium für Wissenschaft und Kunst<br>
+  Rheinstraße 23 - 25<br>
+  65185 Wiesbaden</p>
+
+  <p><strong>Studienleitung:</strong><br>
+  Prof. Dr. Felix Tacke<br>
+  Philipps-Universität Marburg<br>
+  Institut für Romanische Philologie<br>
+  Wilhelm-Röpke-Str. 6D<br>
+  35032 Marburg<br>
+  Tel.: +49 6421 28-24776<br>
+  E-Mail: <a href="mailto:felix.tacke@uni-marburg.de">felix.tacke@uni-marburg.de</a></p>
+
+  <h2>Haftungsausschluss und rechtliche Hinweise</h2>
+  <h3>Haftung für Inhalte</h3>
+  <p>Die Inhalte dieser Website werden mit größtmöglicher Sorgfalt erstellt. Für die
+  Richtigkeit, Vollständigkeit und Aktualität der Inhalte wird jedoch keine Gewähr
+  übernommen.</p>
+
+  <h3>Haftung für Links</h3>
+  <p>Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte
+  externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber
+  verantwortlich.</p>
+
+  <h3>Urheberrecht</h3>
+  <p>Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen
+  dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der
+  Verwertung außerhalb der Grenzen des Urheberrechts bedürfen der schriftlichen Zustimmung des
+  jeweiligen Autors bzw. Erstellers.</p>
+</div>
+
+<!-- PAGE FOOTER -->
+
+<div class="footer">
+  <div>
+    &copy; <span id="currentYear"></span> | 
+    <a href="https://uni-marburg.de/YW1KYG" target="_blank">Felix Tacke</a> | 
+    Philipps-Universität Marburg | 
+    <a href="{{ url_for('impressum') }}">Impressum</a> | 
+    <a href="{{ url_for('datenschutz') }}">Datenschutz</a>
+  </div>
+</div>
+  
+</body>
+</html>

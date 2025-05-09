@@ -5,35 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="data:image/x-icon;,">
   <title>MAR.ELE</title>
-  <link rel="stylesheet" href="static/css/index_styles.css">
+  <link rel="icon" type="image/x-icon" href="static/img/favicon.ico">
+  <link rel="stylesheet" href="static/css/marele_styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
   <script src="static/js/player_script.js"></script>
-
-
-
-
-
 </head>
 <body>
   <header>
     <div id="logoContainer">
-      <a href="{{ url_for('index') }}"><img src="static/img/logo_ele.jpg" width="350" alt="ELE"></a>
+      <a href="{{ url_for('index') }}"><img src="static\img\logo_marele.jpg" width="225" alt="MARELE"></a>
     </div>
+    <!-- Navigation -->
     <div id="mainNavigation">
       <nav>
         <ul>
-          <!-- Navigation links -->
-          <li><a href="{{ url_for('index') }}" class="page-link">Inicio</a></li>
-          <li><a href="{{ url_for('proyecto') }}" class="page-link"><i class="fa-solid fa-building-columns"></i> Proyecto</a></li>
-          <li><a href="{{ url_for('informantes') }}" class="page-link active"><i class="bi bi-person-lines-fill"></i> Informantes</a></li>
-          <li><a href="{{ url_for('analisis') }}" class="page-link"><i class="bi bi-clipboard-data-fill"></i> Análisis</a></li>
-          <!-- Logout Button -->
+          <li><a href="{{ url_for('index') }}" class="page-link"><i class="bi bi-house"></i></a></li>
+          <li><a href="{{ url_for('proyecto') }}" class="page-link">Proyecto</a></li>
+          <li><a href="{{ url_for('informantes') }}" class="page-link active"> Informantes</a></li>
+          <li><a href="{{ url_for('analisis') }}" class="page-link">Análisis</a></li>
           <li class="logout-item">
             <a href="{{ url_for('logout') }}" class="logout-link">
-              <i class="bi bi-box-arrow-right" alt="Logout"> Salir</i>
+              <i class="bi bi-box-arrow-right" alt="Logout"></i>
             </a>
           </li>
         </ul>
@@ -41,157 +35,160 @@
     </div>
   </header>
 
+<!-- PAGE CONTENT -->
+<div id="content-container">
 
+  <!-- Header mit Back-Button und Dokumentname -->
+  <div class="header-container">
+    <a href="javascript:history.back()" class="back-link">
+      <i class="bi bi-chevron-left" alt="Volver"></i>
+    </a>
+    <!-- Dieser Titel wird aus dem JSON „filename“ oder „metadata.Code“ gefüllt -->
+    <h1 id="documentName"></h1>
+  </div>
 
+  <!-- Tabelle mit Transkription (links) und Sidebars (rechts) -->
+  <table id="player-table">
+    <tr>
+      <!-- Linke Spalte: Transkript -->
+      <td>
+        <div id="transcriptionContainer"></div>
+      </td>
 
-<!-- PAGE CONTENT HERE (content-container) -->
-  <div id="content-container">
-    
-    <div><a href="javascript:history.back()" class="link"><i class="bi bi-chevron-left" alt="Volver"></i></a></div>
+      <!-- Rechte Spalte: Sidebarelemente -->
+      <td id="sidebars">
 
-    <h1>Audio</h1>
+        <!-- Metadaten-Container -->
+        <div id="sidebarContainer-meta">
+          <h5>Metadatos</h5>
+          <p class="narrow" id="code"></p>
+          <p class="narrow" id="spanishLevel"></p>
+          <p class="narrow" id="birthYear"></p>
+          <p class="narrow" id="gender"></p>
+          <p class="narrow" id="residencesPrevious"></p>
+          <p class="narrow" id="l1"></p>
+          <p class="narrow" id="l2l3"></p>
+          <p class="narrow" id="motherL1"></p>
+          <p class="narrow" id="fatherL1"></p>
+          <p class="narrow" id="experienceAbroad"></p>
+          <p class="narrow" id="comments"></p>
+          <p class="narrow" id="recordingDate"></p>
+        </div>             
 
-    <table id="player-table">
-      <tr>
-        <td width="20%" id="sidebars">
- 
-          <div id="sidebarContainer-meta">
-            <h2>Metadatos</h2>
-            <div id="metadataList"></div>
+        <div id="sidebarContainer-meta">
+          <h6>Lectura</h6>
+        </div>
+
+        <!-- Markieren von Buchstaben -->
+        <div id="sidebarContainer-letters">
+          <h5>
+            Marcar letras 
+            <i class="fa-solid fa-circle-question" style="color: #303030;" onclick="toggleTooltip(event)"></i>
+            <span id="clickTooltip" class="tooltip-text">
+              <p>Pueden destacarse letras, secuencias de letras y palabras individuales en el texto, y se mostrará el número de resultados.</p>
+              <p>Al ingresar una letra mit "<span class="tooltip-high">_</span>" (p.ej., "<span class="tooltip-high">s_</span>"), solo se marcarán las ocurrencias al final de las palabras.</p>
+              <p>Al ingresar mit "<span class="tooltip-high">#</span>" (p.ej., "<span class="tooltip-high">s#</span>") solo se marcarán las ocurrencias antes de signos de puntuación (<span class="tooltip-high">.,?!</span>).</p>
+            </span>
+          </h5>
+          <input type="text" class="entrar_letras" id="markInput" placeholder="letra(s)"><br>
+          <button class="button" onclick="markLetters()">Marcar</button>
+          <div id="buttonsContainer">
+            <button class="borrar" id="resetMarkingsButton" style="display: none;" onclick="resetMarkings()">Borrar todo</button>
           </div>
-          
-          <div id="sidebarContainer">
-            <h2>Marcar letras 
-              <i class="fa-solid fa-circle-question" style="color: #cb4316;" onclick="toggleTooltip(event)"></i>
-              <span id="clickTooltip" class="tooltip-text">
-                <p>Pueden destacarse letras, secuencias de letras y palabras individuales en el texto, y se mostrará el número de resultados.</p>
-                <p>Al ingresar una letra con "<span class="tooltip-high">_</span>" (p.ej., "<span class="tooltip-high">s_</span>"), solo se marcarán las ocurrencias al final de las palabras.</p>
-                <p>Al ingresar con "<span class="tooltip-high">#</span>" (p.ej., "<span class="tooltip-high">s#</span>") solo se marcarán las ocurrencias antes de signos de puntuación (<span class="tooltip-high">.,?!</span>).</p>
-              </span>
-            </h2>
-            <input type="text" class="entrar_letras" id="markInput" placeholder="letra(s)">
-            <button class="button" onclick="markLetters()">Marcar</button>
-            
-            <div id="buttonsContainer"><button class="borrar" id="resetMarkingsButton" style="display: none;" onclick="resetMarkings()">Borrar todo</button></div>
-          </div>
+        </div>
 
+        <!-- Shortcuts -->
+        <div id="sidebarContainer-controls">
+          <h5>Shortcuts/Audio</h5>
+          <p><span class="code">CTRL</span> + <span class="code">ESPACIO</span> = iniciar/pausar</p>
+          <p><span class="code">CTRL</span> + <span class="code">,</span> = saltar -3s</p>
+          <p><span class="code">CTRL</span> + <span class="code">.</span> = saltar +3s</p>
+          <p><span class="code">Click</span> + <span class="code">CTRL</span> = desde palabra</p>
+          <p><span class="code">Click</span> = solo palabra</p>
+        </div>
 
-          
-          <div id="sidebarContainer">
-            <h2>Shortcuts/Audio</h2>
-            <p><span class="code">CTRL</span> + <span class="code">ESPACIO</span> = iniciar/pausar</p>
-            <p><span class="code">CTRL</span> + <span class="code">,</span> = saltar -3s</p>
-            <p><span class="code">CTRL</span> + <span class="code">.</span> = saltar +3s</p>
-            <p><span class="code">Click</span> + <span class="code">CTRL</span> = desde palabra</p>
-            <p><span class="code">Click</span> = solo palabra</p>
-          </div>
-
-          <div id="sidebarContainer">
-            <h2>Exportar
-            <i class="fa-solid fa-circle-question" style="color: #cb4316;" onclick="toggleTooltip(event)"></i>
+        <!-- Export -->
+        <div id="sidebarContainer-export">
+          <h5>
+            Exportar
+            <i class="fa-solid fa-circle-question" style="color: #303030;" onclick="toggleTooltip(event)"></i>
             <span id="clickTooltip" class="tooltip-text">
               <p>Aquí se pueden descargar los datos en bruto:</p>
               <p>El archivo <span class="tooltip-high">mp3</span> tiene la calidad máxima disponible (generalmente 128 kBit/s).</p>
               <p>El archivo <span class="tooltip-high">JSON</span> contiene toda la información junto con las marcas de tiempo de cada palabra individual.</p>
               <p>El archivo <span class="tooltip-high">TXT</span> contiene los metadatos y la transcripción sin marcas tal como se presentan aquí.</p>
-            </span></h2>
-            <a id="downloadMp3" class="download-link"><i class="bi bi-filetype-mp3"></i></a>
-            <a id="downloadJson" class="download-link"><i class="bi bi-filetype-json"></i></a>
-            <a id="downloadTxt" class="download-link">
-              <i class="bi bi-filetype-txt"></i>
-            </a>           
-          </div>       
-          
-          
-        </td>
-        
-        <td width="80%">
-          <div id="transcriptionContainer">
-
-          </div>
-          
-    
-        </td>
-      </tr>
-      <tr>
-        <td></td>
-        <td text-align="right">
-          <div class="custom-audio-player">
-            <div class="player-controls">
-              <!-- Erste Zeile: Fortschrittsanzeige und Lautstärkeregelung -->
-              <div class="player-controls-top">
-                <input type="range" id="progressBar" min="0" max="100" value="0" class="progress-bar">
-                <div class="volume-control-container">
-                    <i id="muteBtn" class="fa-solid fa-volume-high" style="color: #303030;"></i>  
-                    <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="1.0" class="volume-control">
-                </div>
-              </div>
-            
-          
-              <!-- Zweite Zeile: Abspiel-/Pause-, Vorwärts-/Rückwärts-Buttons und Geschwindigkeitsregelung -->
-              
-
-              <div class="player-controls-bottom">
-                <div class="time-display" id="timeDisplay">0:00 / 0:00</div>
-                  <div class="playContainer">
-                    <div id="seconds">
-                      <i id="rewindBtn" class="fa-solid fa-rotate-left fa-xl" style="color: #303030;"></i>
-                      <span>3</span>
-                    </div>            
-                    <i id="playPauseBtn" class="bi bi-play-circle-fill" style="font-size: 3em; color: #303030"></i>
-                    <div id="seconds">
-                      <i id="forwardBtn" class="fa-solid fa-rotate-right fa-xl" style="color: #303030;"></i>
-                      <span>3</span>
-                    </div>                 
-                  </div>
-                  <div class="speed-control-container">
-                    <i class="bi bi-speedometer2" style="font-size: 1.2em; color: #303030"></i>
-                    <input type="range" id="speedControlSlider" min="0.5" max="1.5" step="0.1" value="1.0">
-                    <div id="speedDisplay">1.0x</div>
-                  </div>
-              </div>
-          </div>
-          
+            </span>
+          </h5>
+          <a id="downloadMp3" class="download-link">
+            <i class="bi bi-filetype-mp3"></i>
+          </a>
+          <a id="downloadJson" class="download-link">
+            <i class="bi bi-filetype-json"></i>
+          </a>
+          <a id="downloadTxt" class="download-link">
+            <i class="bi bi-filetype-txt"></i>
+          </a>
         </div>
-        
-        
-        
-        
-        
-        </td>
-      </tr>
-    </table>
+      </td>
+    </tr>
+  </table>
 
-
-    <audio id="audioPlayer"  controls preload="auto">Your browser does not support the audio element.</audio>
-    
-  
-    
+  <!-- Custom Audio-Player (unterhalb der Tabelle) -->
+  <div class="custom-audio-player">
+    <div class="player-controls">
+      <div class="player-controls-top">
+        <input type="range" id="progressBar" min="0" max="100" value="0" class="progress-bar">
+        <div class="volume-control-container">
+          <i id="muteBtn" class="fa-solid fa-volume-high" style="color: #303030;"></i>
+          <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="1.0" class="volume-control">
+        </div>
+      </div>
+      <div class="player-controls-bottom">
+        <div class="time-display" id="timeDisplay">0:00 / 0:00</div>
+        <div class="playContainer">
+          <div id="seconds">
+            <i id="rewindBtn" class="fa-solid fa-rotate-left fa-xl" style="color: #303030;"></i>
+            <span>3</span>
+          </div>
+          <i id="playPauseBtn" class="bi bi-play-circle-fill" style="font-size: 3em; color: #303030"></i>
+          <div id="seconds">
+            <i id="forwardBtn" class="fa-solid fa-rotate-right fa-xl" style="color: #303030;"></i>
+            <span>3</span>
+          </div>
+        </div>
+        <div class="speed-control-container">
+          <i class="bi bi-speedometer2" style="font-size: 1.2em; color: #303030"></i>
+          <input type="range" id="speedControlSlider" min="0.5" max="2" step="0.1" value="1.0">
+          <div id="speedDisplay">1.0x</div>
+        </div>
+      </div>
+    </div>
   </div>
 
-    
+  <!-- Audio-Element -->
+  <audio id="audioPlayer" controls preload="auto">
+    Your browser does not support the audio element.
+  </audio>
 
-
-
-
-
-
+  <!-- Scroll-to-top Button -->
+  <div id="scrollToTopBtn" style="display: block;">
+    <i class="bi bi-chevron-up"></i>
   </div>
+</div>
 
-  
-
-  
-  
 
   <!-- PAGE FOOTER -->
 
   <div class="footer">
-    <div>&copy; <span id="currentYear"></span> | <a href="https://uni-marburg.de/YW1KYG" target="_blank">Felix Tacke</a> | Philipps-Universität Marburg</div>
+    <div>
+      &copy; <span id="currentYear"></span> | 
+      <a href="https://uni-marburg.de/YW1KYG" target="_blank">Felix Tacke</a> | 
+      Philipps-Universität Marburg | 
+      <a href="{{ url_for('impressum') }}">Impressum</a> | 
+      <a href="{{ url_for('datenschutz') }}">Datenschutz</a>
+    </div>
   </div>
   <div id="scrollToTopBtn"><i class="bi bi-chevron-up"></i></div>
-  
-
-
 
 </body>
 </html>

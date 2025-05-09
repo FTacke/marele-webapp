@@ -38,7 +38,7 @@ def index():
                 JWT_SECRET_KEY,
                 algorithm="HS256"
             )
-            response = make_response(redirect(url_for('informantes')))
+            response = make_response(redirect(url_for('proyecto')))
             response.set_cookie('jwt_token', token, httponly=True, secure=True)  # Token als HttpOnly-Cookie setzen
             return response
         else:
@@ -71,10 +71,21 @@ def validate_jwt():
         return False
 
 # ---------------------------------------------------------
-# Routen für deine 4 HTML-Seiten mit Authentifizierungsschutz
+# Routen für deine Seiten
 # ---------------------------------------------------------
+
+@app.route('/proyecto')
+def proyecto():
+    """
+    Zeigt die Seite "proyecto.html". Diese Seite ist ohne Authentifizierung zugänglich.
+    """
+    return render_template('proyecto.html')
+
 @app.route('/informantes')
 def informantes():
+    """
+    Zeigt die Seite "informantes.html". Diese Seite erfordert eine Authentifizierung.
+    """
     if not validate_jwt():
         return redirect(url_for('index'))
     return render_template('informantes.html')

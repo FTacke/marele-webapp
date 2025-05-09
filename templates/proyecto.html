@@ -11,7 +11,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script>
     // Erstelle den Player-Link vorab mit Flask url_for
@@ -28,8 +27,8 @@
         <ul>
           <!-- Navigation links -->
           <li><a href="{{ url_for('index') }}" class="page-link">Inicio</a></li>
-          <li><a href="{{ url_for('proyecto') }}" class="page-link"><i class="fa-solid fa-building-columns"></i> Proyecto</a></li>
-          <li><a href="{{ url_for('informantes') }}" class="page-link active"><i class="bi bi-person-lines-fill"></i> Informantes</a></li>
+          <li><a href="{{ url_for('proyecto') }}" class="page-link active"><i class="fa-solid fa-building-columns"></i> Proyecto</a></li>
+          <li><a href="{{ url_for('informantes') }}" class="page-link"><i class="bi bi-person-lines-fill"></i> Informantes</a></li>
           <li><a href="{{ url_for('analisis') }}" class="page-link"><i class="bi bi-clipboard-data-fill"></i> Análisis</a></li>
           <!-- Logout Button -->
           <li class="logout-item">
@@ -42,31 +41,23 @@
     </div>
   </header>
 
-
-
-
 <!-- PAGE CONTENT HERE (content-container) -->
   <div id="content-container">
 
-    <table id="audiofile-table">
-      <thead>
-        <tr>
-          <th data-sort-key="Code">Informante</th>
-          <th>Audio</th> <!-- Neue Spalte für den Audio-Link -->
-          <th data-sort-key="BirthYear">Nacido/a</th>
-          <th data-sort-key="L2_3Spanish">Español (nivel)</th>
-          <th data-sort-key="L1">L1</th>
-          <th data-sort-key="L2">L2/L3 adicionales</th>
-          <th data-sort-key="ExperienceAbroad">Estancias (en países hispanófonos)</th>
-          <th data-sort-key="RecordingDate">Fecha</th>
-        </tr>
-      </thead>      
-      <tbody>
-        <!-- Diese Zeile ist leer und wird vom JavaScript-Code gefüllt -->
-      </tbody>
-    </table>
-    
-        
+  <h2>MAR.ELE</h2>
+  <p>El proyecto MAR.ELE estudia la pronunciación del español como lengua extranjera. Se trata de un proyecto de corpus que consiste en grabaciones realizadas con estudiantes de la Universidad de Marburg, Alemania. A los/las estudiantes se les pidió leer tanto un texto como una lista de palabras.* El corpus, que se amplía continuamente y se publica aquí exclusivamente con fines lingüísticos y didácticos, está diseñado para facilitar estudios empíricos sistemáticos sobre las dificultades, los desafíos y el desarrollo de la competencia en la pronunciación del español como lengua extranjera.
+  <br><br>Bajo “Informantes” se presentan informaciones sociodemográficas relevantes acerca de los/las informantes.** La página permite reproducir la grabación completa de cada uno/a de los/las informantes para su análisis individual (haciendo clic en "Audio").
+  Bajo “Análisis” se proporciona una tabla que permite reproducir la pronunciación de cada uno/a de los ítems de la lista y las frases del texto leído desde una perspectiva comparativa.
+  <br><br>*La lista corresponde a la utilizada en el proyecto FEC – Fonología del Español Contemporáneo, lo que favorece estudios comparativos.
+  <br>**El nivel de español indicado (A1 hasta C2) sigue el Marco Común Europeo de Referencia para las Lenguas, basado en la autoevaluación de los participantes.</p>
+  <br>
+
+  <h2>Créditos</h2>
+  <p>Diseño: Felix Tacke</p>
+  <p>Programación e infraestructura digital: Felix Tacke</p>
+  <p>Grabaciones: Felix Tacke & estudiantes</p>
+
+  
   </div>
 
   

@@ -1,1 +1,44 @@
-password.env
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtuelle Umgebungen
+venv/
+.env
+.env.*
+
+# VS Code
+.vscode/
+
+# Unnötige Extensions
+.qodo/
+
+# Lokale Datenordner
+grabaciones/
+items/
+keys/
+LOKAL/
+
+# Sensible Dateien
+passwords.env
+
+# Docker
+docker-compose.override.yml
+**/Dockerfile*
+
+# Logs und Datenbanken
+*.log
+*.sqlite3
+
+# Runtime-Dateien
+instance/
+*.pid
+*.sock
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db

@@ -7,9 +7,3 @@ document.addEventListener('DOMContentLoaded', function () {
   
     
 });
-
-// Fügt das aktuelle Jahr in ein Element mit der ID "currentYear" ein
-document.addEventListener("DOMContentLoaded", function() {
-  const year = new Date().getFullYear();
-  document.getElementById("currentYear").textContent = year;
-});

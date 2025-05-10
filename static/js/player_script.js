@@ -13,15 +13,20 @@ document.addEventListener('DOMContentLoaded', function () {
     return num < 10 ? '0' + num : num.toString();
   }
 
-  function isElementInViewport(element) {
-    const rect = element.getBoundingClientRect();
-    return (
-      rect.top >= 0 &&
-      rect.left >= 0 &&
-      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-    );
-  }
+function isElementInViewport(element, offset = 150) {
+  const rect = element.getBoundingClientRect();
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  const viewportWidth  = window.innerWidth  || document.documentElement.clientWidth;
+
+  return (
+    rect.top    >= 0 &&
+    rect.left   >= 0 &&
+    // statt rect.bottom <= viewportHeight
+    rect.bottom <= (viewportHeight - offset) &&
+    rect.right  <= viewportWidth
+  );
+}
+
 
   // ---------------------------------------------------
   // 1) URL-Parameter (audio/transcription)

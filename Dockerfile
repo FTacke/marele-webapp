@@ -21,7 +21,7 @@ RUN pip install --no-cache-dir "pyjwt[crypto]"
 COPY . .
 
 # Kopiere die Schlüsseldateien in das Image
-COPY keys /app/keys
+# COPY keys /app/keys
 
 # Exponiere den Port, auf dem Flask läuft
 EXPOSE 5000

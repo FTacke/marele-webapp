@@ -2,41 +2,40 @@ from flask import Flask, render_template, jsonify, send_from_directory, request,
 from dotenv import load_dotenv
 import os
 import jwt
+import json
 from datetime import datetime, timedelta
 from werkzeug.security import check_password_hash, generate_password_hash
 
-# Lade Umgebungsvariablen aus der Datei 'passwords.env'
+# ----------------------------------------------------------------
+# Konfiguration und Authentifizierung
+# ----------------------------------------------------------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-load_dotenv(dotenv_path=os.path.join(BASE_DIR, "passwords.env"))
+load_dotenv(os.path.join(BASE_DIR, "passwords.env"))
 
-# Flask-App initialisieren
 app = Flask(__name__)
-app.secret_key = os.getenv("FLASK_SECRET_KEY", "defaultsecret")  # In Produktion einen sicheren Schlüssel verwenden
+app.secret_key = os.getenv("FLASK_SECRET_KEY", "defaultsecret")
 
-# JWT-Schlüssel aus Umgebungsvariablen laden
+# Schlüssel laden (entweder aus dem lokalen keys-Ordner oder aus den Umgebungsvariablen)
 LOCAL_PRIVATE_KEY_PATH = os.path.join(BASE_DIR, "keys", "private.pem")
 LOCAL_PUBLIC_KEY_PATH = os.path.join(BASE_DIR, "keys", "public.pem")
 PRIVATE_KEY_PATH = LOCAL_PRIVATE_KEY_PATH if os.path.exists(LOCAL_PRIVATE_KEY_PATH) else os.getenv("PRIVATE_KEY_PATH")
 PUBLIC_KEY_PATH = LOCAL_PUBLIC_KEY_PATH if os.path.exists(LOCAL_PUBLIC_KEY_PATH) else os.getenv("PUBLIC_KEY_PATH")
 
 try:
-    with open(PRIVATE_KEY_PATH, "r") as private_file:
-        PRIVATE_KEY = private_file.read()
-    with open(PUBLIC_KEY_PATH, "r") as public_file:
-        PUBLIC_KEY = public_file.read()
-except FileNotFoundError as e:
-    raise FileNotFoundError(f"Schlüsseldatei nicht gefunden: {e}")
+    with open(PRIVATE_KEY_PATH, "r") as pf:
+        PRIVATE_KEY = pf.read()
+    with open(PUBLIC_KEY_PATH, "r") as pf:
+        PUBLIC_KEY = pf.read()
+except Exception as e:
+    raise Exception(f"Schlüsseldateien nicht gefunden: {e}")
 
-# Benutzergruppen und Passwörter aus der .env-Datei laden
-GROUPS = {
-    "admin": os.getenv("ADMIN_PASSWORD"),
-    "seminario25": os.getenv("SEMINARIO25_PASSWORD"),
-    "externo1": os.getenv("EXTERNO1_PASSWORD"),
-    "externo2": os.getenv("EXTERNO2_PASSWORD"),
-    "guest": os.getenv("GUEST_PASSWORD")
-}
+# Benutzergruppen und Passwörter (alle mit _PASSWORD in .env)
+GROUPS = {}
+for key, value in os.environ.items():
+    if key.endswith("_PASSWORD"):
+        group_name = key[:-9].lower()  # Entfernt '_PASSWORD' und macht Kleinbuchstaben
+        GROUPS[group_name] = value
 
-# Validierung der geladenen Passwörter
 for group, password in GROUPS.items():
     if password is None:
         raise ValueError(f"Passwort für Gruppe '{group}' fehlt in der .env-Datei.")
@@ -48,48 +47,9 @@ ITEMS_FOLDER = os.path.join(app.root_path, "items")
 # ---------------------------------------------------------
 # Authentifizierung
 # ---------------------------------------------------------
-@app.route("/", methods=["GET", "POST"])
-def index():
-    if request.method == "POST":
-        group = request.form.get("group")
-        password = request.form.get("password")
+# Entferne die doppelte Definition der index-Funktion, die zu einem Fehler führt
 
-        # Prüfen, ob der Benutzername existiert
-        if group not in GROUPS:
-            flash("Error: Usuario desconocido", "error")
-            return render_template("index.html", logged_in=False)
-        
-        # Benutzername existiert, nun Passwort prüfen
-        if not check_password_hash(GROUPS[group], password):
-            flash("Error: Palabra clave incorrecta", "error")
-            return render_template("index.html", logged_in=False)
-
-        # JWT-Token erstellen, wenn alles korrekt ist
-        token = jwt.encode(
-            {
-                "group": group,
-                "exp": datetime.utcnow() + timedelta(hours=3)
-            },
-            PRIVATE_KEY,
-            algorithm="RS256"
-        )
-        response = make_response(redirect(url_for("index")))
-        response.set_cookie("jwt_token", token, httponly=True, secure=True)
-        return response
-
-    # GET-Anfrage: Überprüfen, ob ein gültiger Token im Cookie vorliegt
-    token = request.cookies.get("jwt_token")
-    logged_in = False
-    if token:
-        try:
-            jwt.decode(token, PUBLIC_KEY, algorithms=["RS256"])
-            logged_in = True
-        except jwt.ExpiredSignatureError:
-            flash("Sesión expirada. Por favor, inicie sesión de nuevo.", "error")
-        except jwt.InvalidTokenError:
-            flash("Token no válido. Por favor, inicie sesión de nuevo.", "error")
-
-    return render_template("index.html", logged_in=logged_in)
+# Die ursprüngliche index-Funktion bleibt unverändert, die zweite wird entfernt
 
 @app.route("/logout")
 def logout():
@@ -189,8 +149,95 @@ def add_security_headers(response):
     response.headers["X-Robots-Tag"] = "noindex, nofollow"
     return response
 
+# ----------------------------------------------------------------
+# Counter-Funktion
+# ----------------------------------------------------------------
+
+def load_counters():
+    if not os.path.exists("counters.json"):
+        return {"total": {"overall": 0, "monthly": {}, "days": []}, "groups": {}}
+    with open("counters.json", "r") as f:
+        return json.load(f)
+
+def save_counters(data):
+    with open("counters.json", "w") as f:
+        json.dump(data, f, indent=2)
+
+def increment_counters(group: str):
+    data = load_counters()
+    now = datetime.utcnow()
+    month = f"{now.year}-{now.month:02d}"
+    day = now.strftime("%Y-%m-%d")
+
+    data["total"]["overall"] += 1
+    data["total"]["monthly"][month] = data["total"]["monthly"].get(month, 0) + 1
+    if "days" not in data["total"]:
+        data["total"]["days"] = []
+    data["total"]["days"].append(day)
+
+    grp = data["groups"].setdefault(group, {"overall": 0, "monthly": {}, "days": []})
+    grp["overall"] += 1
+    grp["monthly"][month] = grp["monthly"].get(month, 0) + 1
+    grp["days"].append(day)
+
+    save_counters(data)
+
+@app.route("/", methods=["GET", "POST"])
+def index():
+    if request.method == "POST":
+        group = request.form.get("group")
+        if group:
+            group = group.lower()
+        password = request.form.get("password")
+
+        # Prüfen, ob der Benutzername existiert
+        if group not in GROUPS:
+            flash("Error: Usuario desconocido", "error")
+            return render_template("index.html", logged_in=False)
+        
+        # Benutzername existiert, nun Passwort prüfen
+        if not check_password_hash(GROUPS[group], password):
+            flash("Error: Palabra clave incorrecta", "error")
+            return render_template("index.html", logged_in=False)
+
+        # JWT-Token erstellen, wenn alles korrekt ist
+        token = jwt.encode(
+            {
+                "group": group,
+                "exp": datetime.utcnow() + timedelta(hours=3)
+            },
+            PRIVATE_KEY,
+            algorithm="RS256"
+        )
+        response = make_response(redirect(url_for("index")))
+        response.set_cookie("jwt_token", token, httponly=True, secure=True)
+
+        # Zugriffszähler erhöhen
+        increment_counters(group)
+
+        return response
+
+    # GET-Anfrage: Überprüfen, ob ein gültiger Token im Cookie vorliegt
+    token = request.cookies.get("jwt_token")
+    logged_in = False
+    if token:
+        try:
+            jwt.decode(token, PUBLIC_KEY, algorithms=["RS256"])
+            logged_in = True
+        except jwt.ExpiredSignatureError:
+            flash("Sesión expirada. Por favor, inicie sesión de nuevo.", "error")
+        except jwt.InvalidTokenError:
+            flash("Token no válido. Por favor, inicie sesión de nuevo.", "error")
+
+    return render_template("index.html", logged_in=logged_in)
+
 # ---------------------------------------------------------
 # Start der Flask-App
 # ---------------------------------------------------------
+
+# Lokale Testumgebung
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=6001, debug=True)
+
+#if __name__ == "__main__":
+#    app.run(host="0.0.0.0", port=5000, debug=False)

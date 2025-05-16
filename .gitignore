@@ -26,7 +26,7 @@ passwords.env
 # Docker
 docker-compose.override.yml
 **/Dockerfile*
-
+counters.json
 # Logs und Datenbanken
 *.log
 *.sqlite3

@@ -156,8 +156,20 @@ def add_security_headers(response):
 def load_counters():
     if not os.path.exists("counters.json"):
         return {"total": {"overall": 0, "monthly": {}, "days": []}, "groups": {}}
-    with open("counters.json", "r") as f:
-        return json.load(f)
+    try:
+        with open("counters.json", "r") as f:
+            data = json.load(f)
+        # Prüfen, ob die Struktur passt
+        if not isinstance(data, dict):
+            raise ValueError("Ungültige counters.json Struktur")
+        if "total" not in data or "groups" not in data:
+            raise ValueError("Ungültige counters.json Struktur")
+        return data
+    except (json.JSONDecodeError, ValueError):
+        # Ungültige Datei: neu initialisieren und speichern
+        data = {"total": {"overall": 0, "monthly": {}, "days": []}, "groups": {}}
+        save_counters(data)
+        return data
 
 def save_counters(data):
     with open("counters.json", "w") as f:
